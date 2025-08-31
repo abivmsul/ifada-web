@@ -1,103 +1,204 @@
-import Image from "next/image";
+// src/app/page.tsx
+import Hero from '@/components/Hero'
+import SectionWrapper from '@/components/SectionWrapper'
+import Card from '@/components/Card'
+import EventCard from '@/components/EventCard'
+import ResourceCard from '@/components/ResourceCard'
+import Button from '@/components/Button'
+import Link from 'next/link'
 
-export default function Home() {
+/**
+ * Mock data for frontend (replace with Sanity fetch later)
+ */
+const programs = [
+  {
+    title: 'Youth Classes',
+    imageUrl: '/images/youth.jpg',
+    href: '/programs/youth-classes',
+    excerpt: 'Weekly Quran & tajweed for ages 8–18.',
+  },
+  {
+    title: 'Community Outreach',
+    imageUrl: '/images/outreach.jpg',
+    href: '/programs/community-outreach',
+    excerpt: 'Food drives, interfaith panels & volunteer services.',
+  },
+  {
+    title: 'Counseling Services',
+    imageUrl: '/images/counsel.jpg',
+    href: '/programs/counseling-services',
+    excerpt: 'Family, youth and marital counseling.',
+  },
+]
+
+const events = [
+  {
+    id: 'summer-lecture',
+    title: 'Summer Lecture',
+    date: '2025-08-10T18:00:00Z',
+    location: 'Main Hall',
+    imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG',
+    excerpt: 'Tawhid in daily life — join us.',
+  },
+  {
+    id: 'charity-bazaar',
+    title: 'Charity Bazaar',
+    date: '2025-09-05T10:00:00Z',
+    location: 'Community Lawn',
+    imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG',
+    excerpt: 'Food, crafts and family fun.',
+  },
+]
+
+const resources = [
+  { title: 'Ramadan Guide', imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG', href: '/resources/ramadan-guide-2025', summary: 'Timetable, duas & tips.' },
+  { title: 'Sermon Recording', imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG', href: '/resources/sermon-may-2025', summary: 'Audio & notes.' },
+  { title: 'Volunteer Handbook', imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG', href: '/resources/volunteer', summary: 'How to get involved.' },
+]
+
+export default async function HomePage() {
+  // If you add Sanity later, you can fetch here (server-side) and pass real data to components.
+  // Example (placeholder):
+  // const programs = await client.fetch(`*[_type == "program"] | order(order asc){...}`)
+  //
+  // For now we return UI with mock data.
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="overflow-x-hidden">
+      {/* HERO */}
+      <Hero
+        title="Empowering Our Community"
+        subtitle="Knowledge  •  Faith  •  Service"
+        imageUrl="https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG"
+        ctaText="Read Our Story"
+        ctaLink="/about"
+      />
+  
+      {/* diagonal separator */}
+      <div className="w-full overflow-hidden leading-none">
+        <svg viewBox="0 0 1200 120" className="w-full h-12">
+          <path d="M0,0 V120 L1200,0 Z" fill="#f9fafb" />
+        </svg>
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* ABOUT SNAPSHOT (light) */}
+      <SectionWrapper id="about-snapshot" className="bg-gray-50 py-8">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center px-4">
+          <div>
+            <h2 className="text-3xl font-semibold mb-3">Who We Are</h2>
+            <p className="text-gray-700 mb-4 leading-relaxed">
+              Ifada Islamic Foundation brings faith-based education, community outreach,
+              and counseling together under one roof to support and empower our neighbors.
+            </p>
+            <div className="flex gap-3">
+              <Link href="/about"><Button>Read Our Story</Button></Link>
+              {/* <Link href="/programs"><Button as="a" className="bg-white text-primary border">Programs</Button></Link> */}
+              <Link href="/programs" passHref>
+                <Button className="bg-white text-black">
+                  Programs
+                </Button>
+              </Link>
+
+            </div>
+          </div>
+
+          <div className="rounded-lg overflow-hidden shadow-lg">
+            <img src="/images/about-snapshot.jpg" alt="About snapshot" className="w-full h-64 object-cover" />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+      </SectionWrapper>
+
+      {/* separator */}
+      <div className="w-full overflow-hidden leading-none">
+        <svg viewBox="0 0 1200 120" className="w-full h-12">
+          <path d="M0,120 V0 L1200,120 Z" fill="#ffffff" />
+        </svg>
+      </div>
+
+      {/* FEATURED PROGRAMS (white) */}
+      <SectionWrapper id="programs" className="bg-white py-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <h3 className="text-3xl font-semibold text-center mb-6">Featured Programs</h3>
+
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            {programs.map((p) => (
+              <Card key={p.title} {...p} />
+            ))}
+          </div>
+
+          <div className="mt-6 text-center">
+            <Link href="/programs"><Button className="px-8">Explore All Programs</Button></Link>
+          </div>
+        </div>
+      </SectionWrapper>
+
+      {/* separator */}
+      <div className="w-full overflow-hidden leading-none">
+        <svg viewBox="0 0 1200 120" className="w-full h-12">
+          <path d="M0,0 V120 L1200,0 Z" fill="#f9fafb" />
+        </svg>
+      </div>
+
+      {/* UPCOMING EVENTS (light) */}
+      <SectionWrapper id="events" className="bg-gray-50 py-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <h3 className="text-3xl font-semibold text-center mb-6">Upcoming Events</h3>
+
+          <div className="flex gap-6 overflow-x-auto pb-4 -mx-4 px-4">
+            {events.map((e) => (
+              <div key={e.id} className="min-w-[300px] flex-shrink-0">
+                <EventCard description={''} {...e} />
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 text-center">
+            <Link href="/events"><Button className="px-8">View All Events</Button></Link>
+          </div>
+        </div>
+      </SectionWrapper>
+
+      {/* separator */}
+      <div className="w-full overflow-hidden leading-none">
+        <svg viewBox="0 0 1200 120" className="w-full h-12">
+          <path d="M0,120 V0 L1200,120 Z" fill="#ffffff" />
+        </svg>
+      </div>
+
+      {/* LATEST RESOURCES (white) */}
+      <SectionWrapper id="resources" className="bg-white py-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <h3 className="text-3xl font-semibold text-center mb-6">Latest Resources</h3>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {resources.map((r) => (
+              <ResourceCard link={''} description={''} key={r.title} {...r} />
+            ))}
+          </div>
+
+          <div className="mt-6 text-center">
+            <Link href="/resources"><Button className="px-8">See All Resources</Button></Link>
+          </div>
+        </div>
+      </SectionWrapper>
+
+      {/* call to action */}
+      <div className="w-full overflow-hidden leading-none">
+        <svg viewBox="0 0 1200 120" className="w-full h-12">
+          <path d="M0,0 V120 L1200,0 Z" fill="#f9fafb" />
+        </svg>
+      </div>
+
+      <SectionWrapper id="cta" className="bg-secondary text-white py-10">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h3 className="text-2xl font-bold mb-3">Stay Connected</h3>
+          <p className="mb-6">Join our Telegram for real-time updates, event reminders and volunteer opportunities.</p>
+          <div className="flex justify-center gap-4">
+            <Button as="a" href="https://t.me/ifadaislamic">Join Telegram</Button>
+            <Link href="/contact"><Button className="bg-white text-primary">Contact</Button></Link>
+          </div>
+        </div>
+      </SectionWrapper>
+    </main>
+  )
 }
