@@ -90,19 +90,37 @@ main {
 /* hairline utility */
 .hairline-top { background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent); }
 
-/* globals.css (append) */
+/* Add near your global styles (global.css) */
 
-/* background image blur helper - GPU-friendly */
-.filter-blur-backdrop {
-  /* big blur + slight scale is set on the Image's style; use will-change for performance */
-  filter: blur(8px) brightness(0.85) saturate(0.95);
-  transform-origin: center;
-  will-change: transform, filter;
+/* Projects section background via pseudo-element */
+.projects-section {
+  /* ensure stacking context is normal for ::before to sit behind content */
+  position: relative;
+  /* CSS variable --projects-bg is set from the component inline style */
 }
 
-/* optionally make the frosted panel a little stronger on mobile */
-@media (max-width: 768px) {
-  .backdrop-blur-lg {
-    backdrop-filter: blur(8px) !important;
-  }
+/* pseudo-element background (section-local) */
+.projects-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -20; /* behind overlay -z-10 and content (content is at default 0 or higher) */
+  background-image: var(--projects-bg);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  filter: blur(6px) brightness(0.85) saturate(0.98);
+  pointer-events: none;
+  /* optional smoothing */
+  will-change: transform, opacity;
+  transform: translateZ(0); /* avoid some repaint glitches */
 }
+
+/* overlay already present as -z-10; make sure it stacks above ::before */
+.projects-section .bg-black\/30 {
+  z-index: -10; /* explicitly ensure overlay is above the background */
+}
+
+/* If you want the background to only cover a fixed height region inside the section,
+   you can change `inset: 0` to `top: 0; left: 0; right: 0; height: 420px;` etc. */
+/* * { outline: 1px dashed rgba(255,0,0,0.06); } */

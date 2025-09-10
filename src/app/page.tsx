@@ -72,7 +72,7 @@ import Footer from '@/components/Footer'
 
 import { fetchFeaturedProjects } from '@/lib/fetchers/projects'
 import { fetchFeaturedEvents } from '@/lib/fetchers/events'
-
+import bg from '@/assets/background.jpg'
 export const revalidate = 60
 
 export default async function HomePage() {
@@ -91,7 +91,7 @@ export default async function HomePage() {
     { id: 's3', label: 'Events held', value: 150 },
     { id: 's4', label: 'Years serving', value: 20 },
   ]
-const projectsBg = '/images/backgrounds/projects-hero.jpg'
+
   return (
     <>
       <HeroParallax
@@ -112,7 +112,7 @@ const projectsBg = '/images/backgrounds/projects-hero.jpg'
        <svg viewBox="0 0 1200 120" className="w-full h-full">
           <path d="M1200,0 V20 L0,0 Z" fill="rgba(255, 200, 0, 0.95)" /> </svg>
         </div>
-         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-6">Featured Projects</h2>
+        
         <ProjectsSection projects={projects} />
       </SectionWrapper>
 
