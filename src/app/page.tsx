@@ -1,204 +1,152 @@
+// // src/app/page.tsx
+// import HeroEnhanced from '@/components/HeroEnhanced'
+// import FeatureTiles from '@/components/FeatureTiles'
+// import EventsStrip from '@/components/EventsStrip'
+// import ResourcesGrid from '@/components/ResourcesGrid'
+// import StatsCounter from '@/components/StatsCounter'
+// import CTABar from '@/components/CTABar'
+// import SectionWrapper from '@/components/SectionWrapper'
+// import Footer from '@/components/Footer'
+// import ProjectsSection from '@/components/ProjectsSection' // new component (client)
+// import { fetchFeaturedProjects } from '@/lib/fetchers/projects'
+// import { fetchFeaturedEvents } from '@/lib/fetchers/events'
+// import EventsSection from '@/components/EventsSection'
+
+// export const revalidate = 60
+// export default async function HomePage() {
+//   const projects = await fetchFeaturedProjects(3) // server-side fetch
+//    const events = await fetchFeaturedEvents(3)
+//   // ... other mock lists (events/resources) remain or you can fetch them similarly
+//   const stats = [
+//     { id: 's1', label: 'Students taught', value: 1200 },
+//     { id: 's2', label: 'Volunteers', value: 350 },
+//     { id: 's3', label: 'Events held', value: 150 },
+//     { id: 's4', label: 'Years serving', value: 20 },
+//   ]
+
+//   return (
+//     <>
+//       <HeroEnhanced
+//         title="Empowering Our Community"
+//         subtitle="Knowledge • Faith • Service"
+//         ctaText="Explore Projects"
+//         ctaLink="/projects"
+//         imageUrl="https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG"
+//       />
+
+//       <SectionWrapper className="pt-12 pb-8">
+//         <FeatureTiles />
+//       </SectionWrapper>
+
+//       <SectionWrapper id="projects" className="py-12 bg-white">
+//          <h2 className="text-2xl md:text-3xl font-semibold text-center mb-6">Featured Projects</h2>
+//         <ProjectsSection projects={projects} />
+//       </SectionWrapper>
+
+//     <SectionWrapper id="events" className="py-10">
+//         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-6">Upcoming Events</h2>
+//         <EventsSection events={events} />
+//       </SectionWrapper>
+      
+//       <SectionWrapper className="py-16">
+//         <div className="max-w-5xl mx-auto">
+//           <StatsCounter stats={stats} />
+//         </div>
+//       </SectionWrapper>
+ 
+//       <CTABar title="Support our work — Join or donate" subtitle="Help us deliver programs and services." ctaText="Donate" ctaLink="/donate" />
+//     </>
+//   )
+// }
+
 // src/app/page.tsx
-import Hero from '@/components/Hero'
+import HeroParallax from '@/components/HeroParallax'
 import SectionWrapper from '@/components/SectionWrapper'
-import Card from '@/components/Card'
-import EventCard from '@/components/EventCard'
-import ResourceCard from '@/components/ResourceCard'
-import Button from '@/components/Button'
-import Link from 'next/link'
+import FeatureTiles from '@/components/FeatureTiles'
+import ProjectsSection from '@/components/ProjectsSection'
+import EventsSection from '@/components/EventsSection'
+import ResourcesGrid from '@/components/ResourcesGrid'
+import StatsCounter from '@/components/StatsCounter'
+import CTABar from '@/components/CTABar'
+import Footer from '@/components/Footer'
 
-/**
- * Mock data for frontend (replace with Sanity fetch later)
- */
-const programs = [
-  {
-    title: 'Youth Classes',
-    imageUrl: '/images/youth.jpg',
-    href: '/programs/youth-classes',
-    excerpt: 'Weekly Quran & tajweed for ages 8–18.',
-  },
-  {
-    title: 'Community Outreach',
-    imageUrl: '/images/outreach.jpg',
-    href: '/programs/community-outreach',
-    excerpt: 'Food drives, interfaith panels & volunteer services.',
-  },
-  {
-    title: 'Counseling Services',
-    imageUrl: '/images/counsel.jpg',
-    href: '/programs/counseling-services',
-    excerpt: 'Family, youth and marital counseling.',
-  },
-]
+import { fetchFeaturedProjects } from '@/lib/fetchers/projects'
+import { fetchFeaturedEvents } from '@/lib/fetchers/events'
 
-const events = [
-  {
-    id: 'summer-lecture',
-    title: 'Summer Lecture',
-    date: '2025-08-10T18:00:00Z',
-    location: 'Main Hall',
-    imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG',
-    excerpt: 'Tawhid in daily life — join us.',
-  },
-  {
-    id: 'charity-bazaar',
-    title: 'Charity Bazaar',
-    date: '2025-09-05T10:00:00Z',
-    location: 'Community Lawn',
-    imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG',
-    excerpt: 'Food, crafts and family fun.',
-  },
-]
-
-const resources = [
-  { title: 'Ramadan Guide', imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG', href: '/resources/ramadan-guide-2025', summary: 'Timetable, duas & tips.' },
-  { title: 'Sermon Recording', imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG', href: '/resources/sermon-may-2025', summary: 'Audio & notes.' },
-  { title: 'Volunteer Handbook', imageUrl: 'https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG', href: '/resources/volunteer', summary: 'How to get involved.' },
-]
+export const revalidate = 60
 
 export default async function HomePage() {
-  // If you add Sanity later, you can fetch here (server-side) and pass real data to components.
-  // Example (placeholder):
-  // const programs = await client.fetch(`*[_type == "program"] | order(order asc){...}`)
-  //
-  // For now we return UI with mock data.
+  const projects = await fetchFeaturedProjects(3)
+  const events = await fetchFeaturedEvents(3)
 
+  // sample resources + stats (replace with real fetchers later)
+  const resources = [
+    { id: 'r1', title: 'Ramadan Guide 2025', image: '/images/resources/ramadan.jpg', href: '/resources/ramadan-2025' },
+    { id: 'r2', title: 'Sermon Recording', image: '/images/resources/sermon.jpg', href: '/resources/sermon-may-2025' },
+    { id: 'r3', title: 'Volunteer Handbook', image: '/images/resources/volunteer.jpg', href: '/resources/volunteer-handbook' },
+  ]
+  const stats = [
+    { id: 's1', label: 'Students taught', value: 1200 },
+    { id: 's2', label: 'Volunteers', value: 350 },
+    { id: 's3', label: 'Events held', value: 150 },
+    { id: 's4', label: 'Years serving', value: 20 },
+  ]
+const projectsBg = '/images/backgrounds/projects-hero.jpg'
   return (
-    <main className="overflow-x-hidden">
-      {/* HERO */}
-      <Hero
+    <>
+      <HeroParallax
         title="Empowering Our Community"
-        subtitle="Knowledge  •  Faith  •  Service"
+        subtitle="Knowledge • Faith • Service"
+        ctaText="Explore Projects"
+        ctaLink="/projects"
         imageUrl="https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG"
-        ctaText="Read Our Story"
-        ctaLink="/about"
+        watermarkSide="left"
       />
-  
-      {/* diagonal separator */}
-      <div className="w-full overflow-hidden leading-none">
-        <svg viewBox="0 0 1200 120" className="w-full h-12">
-          <path d="M0,0 V120 L1200,0 Z" fill="#f9fafb" />
-        </svg>
+
+      <SectionWrapper className="section-tight">
+        <FeatureTiles />
+      </SectionWrapper>
+
+      <SectionWrapper id="projects" className="section-tight bg-white" overlap="up">
+        <div className=" bottom-0 left-0 right-0 h-12 pointer-events-none z-20">
+       <svg viewBox="0 0 1200 120" className="w-full h-full">
+          <path d="M1200,0 V20 L0,0 Z" fill="rgba(255, 200, 0, 0.95)" /> </svg>
+        </div>
+         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-6">Featured Projects</h2>
+        <ProjectsSection projects={projects} />
+      </SectionWrapper>
+
+      <SectionWrapper id="events" className="section-tight" overlap="up">
+        <div className=" bottom-0 left-0 right-0 h-12 pointer-events-none z-20">
+        <svg viewBox="0 0 1200 120" className="w-full h-full"><path d="M0,0 V20 L1200,0 Z" fill="rgba(255, 200, 0, 0.95)"/></svg>
       </div>
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-6">Upcoming Events</h2>
+        <EventsSection events={events} />
+      </SectionWrapper>
 
-      {/* ABOUT SNAPSHOT (light) */}
-      <SectionWrapper id="about-snapshot" className="bg-gray-50 py-8">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center px-4">
-          <div>
-            <h2 className="text-3xl font-semibold mb-3">Who We Are</h2>
-            <p className="text-gray-700 mb-4 leading-relaxed">
-              Ifada Islamic Foundation brings faith-based education, community outreach,
-              and counseling together under one roof to support and empower our neighbors.
-            </p>
-            <div className="flex gap-3">
-              <Link href="/about"><Button>Read Our Story</Button></Link>
-              {/* <Link href="/programs"><Button as="a" className="bg-white text-primary border">Programs</Button></Link> */}
-              <Link href="/programs" passHref>
-                <Button className="bg-white text-black">
-                  Programs
-                </Button>
-              </Link>
+      {/* <SectionWrapper className="section-tight bg-gray-50" overlap="up">
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-6">Latest Resources</h2>
+        <ResourcesGrid items={resources} />
+      </SectionWrapper> */}
 
-            </div>
-          </div>
-
-          <div className="rounded-lg overflow-hidden shadow-lg">
-            <img src="/images/about-snapshot.jpg" alt="About snapshot" className="w-full h-64 object-cover" />
-          </div>
+      <SectionWrapper className="section-tight">
+        <div className=" bottom-0 left-0 right-0 h-12 pointer-events-none z-20">
+       <svg viewBox="0 0 1200 120" className="w-full h-full">
+          <path d="M1200,0 V20 L0,0 Z" fill="rgba(255, 200, 0, 0.95)" /> </svg>
+        </div>
+         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-6">Stats</h2>
+        <div className="max-w-5xl mx-auto">
+          <StatsCounter stats={stats} />
         </div>
       </SectionWrapper>
 
-      {/* separator */}
-      <div className="w-full overflow-hidden leading-none">
-        <svg viewBox="0 0 1200 120" className="w-full h-12">
-          <path d="M0,120 V0 L1200,120 Z" fill="#ffffff" />
-        </svg>
-      </div>
+      <CTABar
+        title="Support our work — Join or donate"
+        subtitle="Help us deliver programs, events and services that uplift the community."
+        ctaText="Donate"
+        ctaLink="/donate"
+      />
 
-      {/* FEATURED PROGRAMS (white) */}
-      <SectionWrapper id="programs" className="bg-white py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <h3 className="text-3xl font-semibold text-center mb-6">Featured Programs</h3>
-
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {programs.map((p) => (
-              <Card key={p.title} {...p} />
-            ))}
-          </div>
-
-          <div className="mt-6 text-center">
-            <Link href="/programs"><Button className="px-8">Explore All Programs</Button></Link>
-          </div>
-        </div>
-      </SectionWrapper>
-
-      {/* separator */}
-      <div className="w-full overflow-hidden leading-none">
-        <svg viewBox="0 0 1200 120" className="w-full h-12">
-          <path d="M0,0 V120 L1200,0 Z" fill="#f9fafb" />
-        </svg>
-      </div>
-
-      {/* UPCOMING EVENTS (light) */}
-      <SectionWrapper id="events" className="bg-gray-50 py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <h3 className="text-3xl font-semibold text-center mb-6">Upcoming Events</h3>
-
-          <div className="flex gap-6 overflow-x-auto pb-4 -mx-4 px-4">
-            {events.map((e) => (
-              <div key={e.id} className="min-w-[300px] flex-shrink-0">
-                <EventCard description={''} {...e} />
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 text-center">
-            <Link href="/events"><Button className="px-8">View All Events</Button></Link>
-          </div>
-        </div>
-      </SectionWrapper>
-
-      {/* separator */}
-      <div className="w-full overflow-hidden leading-none">
-        <svg viewBox="0 0 1200 120" className="w-full h-12">
-          <path d="M0,120 V0 L1200,120 Z" fill="#ffffff" />
-        </svg>
-      </div>
-
-      {/* LATEST RESOURCES (white) */}
-      <SectionWrapper id="resources" className="bg-white py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <h3 className="text-3xl font-semibold text-center mb-6">Latest Resources</h3>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {resources.map((r) => (
-              <ResourceCard link={''} description={''} key={r.title} {...r} />
-            ))}
-          </div>
-
-          <div className="mt-6 text-center">
-            <Link href="/resources"><Button className="px-8">See All Resources</Button></Link>
-          </div>
-        </div>
-      </SectionWrapper>
-
-      {/* call to action */}
-      <div className="w-full overflow-hidden leading-none">
-        <svg viewBox="0 0 1200 120" className="w-full h-12">
-          <path d="M0,0 V120 L1200,0 Z" fill="#f9fafb" />
-        </svg>
-      </div>
-
-      <SectionWrapper id="cta" className="bg-secondary text-white py-10">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h3 className="text-2xl font-bold mb-3">Stay Connected</h3>
-          <p className="mb-6">Join our Telegram for real-time updates, event reminders and volunteer opportunities.</p>
-          <div className="flex justify-center gap-4">
-            <Button as="a" href="https://t.me/ifadaislamic">Join Telegram</Button>
-            <Link href="/contact"><Button className="bg-white text-primary">Contact</Button></Link>
-          </div>
-        </div>
-      </SectionWrapper>
-    </main>
+    </>
   )
 }

@@ -10,8 +10,10 @@ import cn from 'classnames'
 const links = [
   { name: 'Home', to: '/' },
   { name: 'About', to: '/about' },
-  { name: 'Programs', to: '/programs' },
+  { name: 'Projects', to: '/projects' },
+  { name: 'Hadrel', to: '/programs' },
   { name: 'Events', to: '/events' },
+  { name: 'Gallery', to: '/gallery' },
   { name: 'Resources', to: '/resources' },
   { name: 'Contact', to: '/contact' },
 ]
@@ -20,12 +22,18 @@ export default function Header() {
   const pathname = usePathname() || '/'
 
   return (
-    <Disclosure as="header" className="sticky top-0 z-50 bg-gradient-to-r from-primary to-primary-80 shadow">
+   <Disclosure
+      as="header"
+      // Mobile: top→bottom gradient via inline style
+      style={{ background: 'linear-gradient(to right, rgba(2, 34, 70, 0.74), #0057B8)' }}
+      // Desktop: left→right gradient via Tailwind overrides
+      className="sticky top-0 z-50 md:bg-gradient-to-r md:from-primary md:to-primary shadow-lg"
+    >
       {({ open }) => (
         <>
           <div className="container mx-auto px-4 py-3 flex items-center justify-between">
             <Link href="/" className="flex items-center">
-              <Image src={logo} alt="Ifada Logo" width={48} height={48} className="h-18 w-auto" />
+              <Image src={logo} alt="Ifada Logo" className="h-16 w-auto" />
             </Link>
 
             <nav className="hidden md:flex items-center space-x-6">

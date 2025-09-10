@@ -18,7 +18,7 @@ export default function Hero({ title, subtitle, imageUrl, ctaText, ctaLink }: He
       {/* Server-rendered SEO-friendly hero using next/image */}
       <section
         aria-label="Hero"
-        className="relative w-full h-[60vh] md:h-[80vh] flex items-center justify-center bg-black text-white overflow-hidden"
+        className="relative w-full h-[60vh] md:h-[60vh] flex items-center justify-center bg-black text-white overflow-hidden"
       >
         {imageUrl && (
           <div className="absolute inset-0 -z-10">
@@ -34,7 +34,7 @@ export default function Hero({ title, subtitle, imageUrl, ctaText, ctaLink }: He
         )}
 
         <div className="z-10 text-center px-4">
-          <h1 className="text-3xl md:text-5xl font-extrabold">{title}</h1>
+          <h1 className="text-6xl md:text-9xl font-extrabold">About Us</h1>
           {subtitle && <p className="mt-3 text-lg md:text-xl text-white/90">{subtitle}</p>}
         </div>
       </section>

@@ -2,7 +2,8 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import type { ReactNode } from 'react'
-
+import { Inter } from 'next/font/google'
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
 export const metadata = {
   title: 'Ifada Islamic Organization',
   description: 'Knowledge • Faith • Service',
@@ -10,7 +11,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+     <html lang="en" className={inter.className}>
       <body className="bg-white text-gray-900 antialiased">
         <Header />
         <main className="min-h-screen">

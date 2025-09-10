@@ -1,24 +1,26 @@
+// src/components/SectionWrapper.tsx
 'use client'
-
-import { ReactNode } from 'react'
 import { motion } from 'framer-motion'
+import React from 'react'
 import cn from 'classnames'
 
-type SectionWrapperProps = {
+type Props = {
   id?: string
-  children: ReactNode
+  children: React.ReactNode
   className?: string
+  overlap?: 'up' | 'down' | false
 }
 
-export default function SectionWrapper({ id, children, className }: SectionWrapperProps) {
+export default function SectionWrapper({ id, children, className, overlap = false }: Props) {
+  const overlapClass = overlap === 'up' ? 'md:-mt-14' : ''
   return (
     <motion.section
       id={id}
-      className={cn('min-h-screen snap-start flex flex-col justify-center py-12 px-6', className)}
-      initial={{ opacity: 0, y: 40 }}
+      className={cn('px-4 md:px-6', className, overlapClass)}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, amount: 0.18 }}
+      transition={{ duration: 0.6, ease: [0.2, 0.9, 0.2, 1] }}
     >
       {children}
     </motion.section>

@@ -4,10 +4,18 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     // Prefer `remotePatterns` for flexibility, but `domains` also works.
+   
+    domains: ["img.youtube.com"],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'ifadaislamic.org',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io', // for Sanity-hosted images (important later)
         port: '',
         pathname: '/**',
       },

@@ -4,14 +4,20 @@ import Image from 'next/image'
 import logo from '@/assets/ifada-logo.png'
 import Button from './Button'
 import { FaInstagram, FaTiktok } from 'react-icons/fa'
+import { Disclosure } from '@headlessui/react'
 
 export default function Footer() {
   return (
+    <Disclosure
+      as="footer"
+      style={{ background: 'linear-gradient(to top, rgba(2, 34, 70, 0.74), #0057B8)' }}
+      className="text-white mt-16"
+    >
     <footer className="bg-gradient-to-r from-primary to-primary-80 text-white mt-12">
       <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="space-y-3">
           <Link href="/" className="inline-block">
-            <Image src={logo} alt="Ifada Logo" width={40} height={40} />
+            <Image src={logo} alt="Ifada Logo" className="h-16 w-auto" />
           </Link>
           <p className="text-sm opacity-90">Empowering our community through faith-based education and service.</p>
         </div>
@@ -55,5 +61,6 @@ export default function Footer() {
         © {new Date().getFullYear()} Ifada Islamic Foundation. All rights reserved.
       </div>
     </footer>
+    </Disclosure>
   )
 }

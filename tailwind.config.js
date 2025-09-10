@@ -6,11 +6,22 @@ module.exports = {
   ],
   theme: {
     extend: {
+       fontFamily: {
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+      },
       colors: {
         primary: '#0057B8',
         secondary: '#D9A03C',
       },
+       typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.gray.800'),
+            a: { color: theme('colors.primary.600'), '&:hover': { color: theme('colors.primary.700') } },
+          },
+        },
+      }),
     },
   },
-  plugins: [],
+plugins: [require('@tailwindcss/typography')],
 }

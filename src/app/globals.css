@@ -1,17 +1,108 @@
 @import "tailwindcss";
 
-/* Brand variables */
-:root{
+:root {
   --color-primary: #0057B8;
-  --color-secondary: #D9A03C;
+  --color-secondary: #cea233;
+  --color-accent: #C56300;
 }
 
-/* Small utility so old classes like bg-primary work */
-.bg-primary { background-color: var(--color-primary); }
-.text-primary { color: var(--color-primary); }
+@layer base {
+  .bg-primary { background-color: var(--color-primary); }
+  .text-primary { color: var(--color-primary); }
 
-/* Make scroll-snap optional for hero sections */
-main { scroll-behavior: smooth; }
+  .bg-secondary { background-color: var(--color-secondary); }
+  .text-secondary { color: var(--color-secondary); }
 
-/* Accessibility helpers */
-.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .bg-accent { background-color: var(--color-accent); }
+  .text-accent { color: var(--color-accent); }
+}
+
+@layer utilities {
+  /* Gradient color stops */
+  .from-primary {
+    --tw-gradient-from: var(--color-primary);
+    --tw-gradient-to: var(--color-primary);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .to-primary\/80 {
+    --tw-gradient-to: var(--color-primary);
+    --tw-gradient-to-opacity: 0.8;
+  }
+}
+
+html, body, #root {
+  height: 100%;
+}
+main {
+  /* scroll-snap-type: y mandatory; */
+  /* overflow-y: scroll; */
+  scroll-behavior: smooth;
+}
+
+/* globals.css (append) */
+
+/* tighten section spacing */
+.section-tight {
+  padding-top: 3rem;   /* 48px */
+  padding-bottom: 3rem;
+}
+@media (min-width: 768px) {
+  .section-tight {
+    padding-top: 4rem;   /* 64px */
+    padding-bottom: 4rem;
+  }
+}
+
+/* watermark helper */
+.logo-watermark {
+  opacity: 0.06;
+  filter: saturate(0.4) blur(.2px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* subtle parallax offset helper (for layering) */
+.parallax-layer {
+  will-change: transform;
+  transform-origin: center;
+}
+
+/* small helpers */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* globals.css (append) */
+.shadow-elevate {
+  box-shadow: 0 8px 30px rgba(12, 24, 40, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.781);
+}
+
+/* ensure the primary hairline color resolves via CSS variable or direct color */
+:root {
+  --ifada-primary: #0057B8;
+  --ifada-secondary: #D9A03C;
+}
+
+/* hairline utility */
+.hairline-top { background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent); }
+
+/* globals.css (append) */
+
+/* background image blur helper - GPU-friendly */
+.filter-blur-backdrop {
+  /* big blur + slight scale is set on the Image's style; use will-change for performance */
+  filter: blur(8px) brightness(0.85) saturate(0.95);
+  transform-origin: center;
+  will-change: transform, filter;
+}
+
+/* optionally make the frosted panel a little stronger on mobile */
+@media (max-width: 768px) {
+  .backdrop-blur-lg {
+    backdrop-filter: blur(8px) !important;
+  }
+}
