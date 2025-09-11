@@ -75,7 +75,7 @@ export default function GalleryGridClient({ initialCategories }: { initialCatego
   return (
     <div>
       {/* Category tabs + search */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="mt-4 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex flex-wrap gap-2">
           {categories.map((c) => (
             <button

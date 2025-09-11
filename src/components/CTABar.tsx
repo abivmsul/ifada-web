@@ -13,7 +13,7 @@ export default function CTABar({ title, subtitle, ctaText, ctaLink }: { title:st
         </div>
 
         <div>
-          {ctaLink ? <Link href={ctaLink}><Button>{ctaText}</Button></Link> : <Button>{ctaText}</Button>}
+          {ctaLink ? <Link href={ctaLink}><Button className="mt-8 inline-block bg-secondary text-white px-6 py-3 rounded-full shadow-lg">{ctaText}</Button></Link> : <Button>{ctaText}</Button>}
         </div>
       </div>
     </section>

@@ -13,12 +13,14 @@ export default async function BlogIndex() {
     <main>
       <SectionWrapper id="blog" className="py-12">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-semibold">Blogs / News ...</h1>
-            <p className="text-sm text-gray-600">Insights, news and reflections.</p>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-3xl font-semibold">Posts </h1>
+            <p className="text-sm text-secondary">Insights, news and reflections.</p>
           </div>
-
-          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <svg viewBox="0 0 1200 30" className="w-full h-auto" preserveAspectRatio="none">
+              <path d="M0,8 L600,0 L1200,8 L600,16 Z" fill="rgba(255, 200, 0, 0.95)" />
+            </svg>
+          <div className="mt-4 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((p) => (
               <BlogCard
                 key={p._id}

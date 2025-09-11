@@ -34,7 +34,7 @@ export default function Hero({ title, subtitle, imageUrl, ctaText, ctaLink }: He
         )}
 
         <div className="z-10 text-center px-4">
-          <h1 className="text-6xl md:text-9xl font-extrabold">About Us</h1>
+          <h1 className="text-4xl md:text-7xl font-extrabold">About Us</h1>
           {subtitle && <p className="mt-3 text-lg md:text-xl text-white/90">{subtitle}</p>}
         </div>
       </section>

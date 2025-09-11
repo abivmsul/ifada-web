@@ -111,7 +111,7 @@ export default function ProjectsSection({
             href="/projects"
             className="inline-block px-6 py-2 border border-white text-white rounded-lg 
                       transition-all duration-300 ease-in-out 
-                      hover:bg-white hover:text-white hover:shadow-lg hover:scale-[1.02]"
+                      hover:bg-primary hover:text-white hover:shadow-lg hover:scale-[1.02]"
           >
             View all Projects
         </Link>

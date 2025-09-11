@@ -6,6 +6,10 @@ import Button from './Button'
 import Link from 'next/link'
 import BackgroundPattern from './BackgroundPattern'
 import React from 'react'
+// Import the Outfit font from next/font/google
+import { Outfit } from 'next/font/google'
+
+const outfit = Outfit({ subsets: ['latin'] })
 
 type Props = {
   title: string
@@ -112,9 +116,10 @@ export default function HeroParallax({
         style={{ y: contentY } as any}
         className="relative z-20 flex flex-col items-center justify-center px-6 max-w-4xl"
       >
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]">
+        <h1 className={`${outfit.className} text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]`}>
           {title}
         </h1>
+
 
         {subtitle && (
           <p className="mt-4 text-lg md:text-2xl text-white/90 drop-shadow-sm max-w-2xl">
@@ -125,7 +130,7 @@ export default function HeroParallax({
         <div className="mt-6 flex flex-col sm:flex-row gap-4 items-center justify-center">
           {ctaText && ctaLink && (
             <Link href={ctaLink} className="inline-block">
-              <Button>{ctaText}</Button>
+              <Button className='bg-secondary'>{ctaText}</Button>
             </Link>
           )}
 

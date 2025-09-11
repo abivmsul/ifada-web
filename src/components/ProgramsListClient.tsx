@@ -107,9 +107,9 @@ export default function ProgramsListClient({ initialData }: { initialData: ApiRe
   return (
     <div>
       {/* Controls */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="mt-4 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <label className="sr-only" htmlFor="programSearch">Search programs</label>
+          <label className="sr-only" htmlFor="programSearch">Search Hadrels</label>
           <input
             id="programSearch"
             className="border rounded px-3 py-2 w-[220px]"
@@ -141,7 +141,7 @@ export default function ProgramsListClient({ initialData }: { initialData: ApiRe
         {loading && items.length === 0 ? (
           <div className="col-span-full text-center py-8">Loading…</div>
         ) : items.length === 0 ? (
-          <div className="col-span-full text-center py-8 text-gray-600">No programs found.</div>
+          <div className="col-span-full text-center py-8 text-gray-600">No Hadrels found.</div>
         ) : (
           items.map((p) => (
             <Card key={p._id} title={p.title} excerpt={p.excerpt} imageUrl={p.coverImageUrl ?? undefined} href={`/programs/${p.slug ?? p._id}`} />

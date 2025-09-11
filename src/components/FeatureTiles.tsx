@@ -2,25 +2,35 @@
 'use client'
 import React, { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { FaBook, FaHandsHelping, FaComments } from 'react-icons/fa'
+import {
+  FaBookOpen,
+  FaHandsHelping,
+  FaComments,
+  FaHandHoldingMedical,
+  FaPuzzlePiece,
+  FaHeart,
+  FaUsers,
+} from 'react-icons/fa'
 
 const tiles = [
-  { title: 'Knowledge', text: 'Educational programs for all ages.', icon: FaBook },
-  { title: 'Service', text: 'Community outreach & support.', icon: FaHandsHelping },
-  { title: 'Support', text: 'Counseling & family services.', icon: FaComments },
+  { title: 'With joined arms', text: 'በተያያዙ ክንዶች', icon: FaHandsHelping },
+  { title: 'In an Islamic family', text: 'በኢስላማዊ ቤተሰብነት', icon: FaUsers },
+  { title: 'Remembering what was forgotten', text: 'የተረሳውን ማስታወስ', icon: FaComments },
+
+  // New ones
+  { title: 'Filling what was missing', text: 'የጎደለውን መሙላት', icon: FaPuzzlePiece },
+  { title: 'Connecting hearts', text: 'በልብ ለልብ ትስስር', icon: FaHeart },
+  { title: 'Reminding about Islam', text: 'ስለ እስልምና መተዋወስ', icon: FaBookOpen },
 ]
 
 export default function FeatureTiles() {
   const ref = useRef<HTMLDivElement | null>(null)
 
-  // Track scroll progress for this section
   const { scrollYProgress } = useScroll({
     target: ref,
-    // start when top of target hits bottom of viewport, end when bottom of target hits top of viewport
     offset: ['start end', 'end start'],
   })
 
-  // Map scroll progress to visual values
   const topOpacity = useTransform(scrollYProgress, [0, 0.25, 0.6, 1], [0, 0.45, 0.75, 1])
   const topScale = useTransform(scrollYProgress, [0, 0.6, 1], [0.98, 1.02, 1])
   const bottomOpacity = useTransform(scrollYProgress, [0, 0.25, 0.6, 1], [0, 0.35, 0.7, 1])
@@ -28,13 +38,18 @@ export default function FeatureTiles() {
 
   return (
     <section ref={ref} className="relative py-8">
-      {/* Top SVG decorative bar (animated) */}
+      {/* Top decorative bar */}
       <motion.div
         style={{ opacity: topOpacity, scale: topScale }}
         aria-hidden
         className="pointer-events-none absolute left-0 right-0 -top-6 h-8 md:-top-8 md:h-10"
       >
-        <svg className="w-full h-full" viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          className="w-full h-full"
+          viewBox="0 0 1200 40"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <defs>
             <linearGradient id="ft-top-grad" x1="0" x2="1" y1="0" y2="0">
               <stop offset="0%" stopColor="#0057B8" stopOpacity="0.16" />
@@ -46,17 +61,27 @@ export default function FeatureTiles() {
               <feBlend in="SourceGraphic" in2="b" mode="normal" />
             </filter>
           </defs>
-
-          <rect x="0" y="0" width="1200" height="10" fill="url(#ft-top-grad)" filter="url(#ft-blur)" />
-          {/* subtle ornamental stroke path */}
-          <path d="M0 28 C200 10, 400 40, 600 28 C800 16, 1000 36, 1200 20" stroke="#0057B8" strokeOpacity="0.06" strokeWidth="1" fill="none" />
+          <rect
+            x="0"
+            y="0"
+            width="1200"
+            height="10"
+            fill="url(#ft-top-grad)"
+            filter="url(#ft-blur)"
+          />
+          <path
+            d="M0 28 C200 10, 400 40, 600 28 C800 16, 1000 36, 1200 20"
+            stroke="#0057B8"
+            strokeOpacity="0.06"
+            strokeWidth="1"
+            fill="none"
+          />
         </svg>
       </motion.div>
 
-      {/* Content container with inner subtle shadow */}
+      {/* Content container */}
       <div className="max-w-6xl mx-auto px-6">
         <div className="relative bg-white rounded-lg shadow-elevate overflow-hidden">
-          {/* crisp hairlines */}
           <div className="absolute top-0 left-0 right-0 h-px bg-primary/10" />
           <div className="absolute bottom-0 left-0 right-0 h-px bg-primary/10" />
 
@@ -75,10 +100,9 @@ export default function FeatureTiles() {
                   <div className="flex-shrink-0 p-3 rounded-md bg-primary/10 text-primary">
                     <Icon />
                   </div>
-
                   <div>
                     <h3 className="font-semibold text-lg">{t.title}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{t.text}</p>
+                    <p className="text-sm text-secondary mt-1">{t.text}</p>
                   </div>
                 </motion.div>
               )
@@ -87,13 +111,18 @@ export default function FeatureTiles() {
         </div>
       </div>
 
-      {/* Bottom SVG decorative bar (animated) */}
+      {/* Bottom decorative bar */}
       <motion.div
         style={{ opacity: bottomOpacity, scale: bottomScale }}
         aria-hidden
         className="pointer-events-none absolute left-0 right-0 -bottom-6 h-8 md:-bottom-8 md:h-10"
       >
-        <svg className="w-full h-full" viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          className="w-full h-full"
+          viewBox="0 0 1200 40"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <defs>
             <linearGradient id="ft-bottom-grad" x1="1" x2="0" y1="0" y2="0">
               <stop offset="0%" stopColor="#D9A03C" stopOpacity="0.14" />
@@ -105,9 +134,21 @@ export default function FeatureTiles() {
               <feBlend in="SourceGraphic" in2="b" mode="normal" />
             </filter>
           </defs>
-
-          <rect x="0" y="0" width="1200" height="10" fill="url(#ft-bottom-grad)" filter="url(#ft-blur-b)" />
-          <path d="M0 12 C200 30, 400 6, 600 14 C800 24, 1000 8, 1200 18" stroke="#D9A03C" strokeOpacity="0.06" strokeWidth="1" fill="none" />
+          <rect
+            x="0"
+            y="0"
+            width="1200"
+            height="10"
+            fill="url(#ft-bottom-grad)"
+            filter="url(#ft-blur-b)"
+          />
+          <path
+            d="M0 12 C200 30, 400 6, 600 14 C800 24, 1000 8, 1200 18"
+            stroke="#D9A03C"
+            strokeOpacity="0.06"
+            strokeWidth="1"
+            fill="none"
+          />
         </svg>
       </motion.div>
     </section>

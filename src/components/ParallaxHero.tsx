@@ -44,7 +44,7 @@ export default function ParallaxHero({ title, subtitle, imageUrl, ctaText, ctaLi
 
         {ctaText && ctaLink && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-            <Link href={ctaLink} className="mt-8 inline-block bg-secondary text-white px-6 py-3 rounded-full shadow-lg">
+            <Link href={ctaLink} className="mt-8 inline-block bg-secondary text-white px-4 py-2 rounded shadow-lg">
               {ctaText}
             </Link>
           </motion.div>

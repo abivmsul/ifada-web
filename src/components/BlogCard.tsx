@@ -27,7 +27,7 @@ export default function BlogCard({ title, excerpt, imageUrl, href = '#', dateLab
         )}
 
         <div className="p-5">
-          <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
+          <div className="flex items-center justify-between text-sm text-secondary mb-2">
             <div>{dateLabel}</div>
             <div className="flex gap-2">
               {tags.slice(0,3).map(t => <span key={t} className="text-xs px-2 py-1 bg-gray-100 rounded-full">{t}</span>)}

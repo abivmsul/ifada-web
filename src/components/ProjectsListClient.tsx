@@ -98,7 +98,7 @@ export default function ProjectsListClient({ initialData }: { initialData: ApiRe
   return (
     <div>
       {/* Controls */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="mt-4 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-3 flex-wrap">
           <input
             className="border rounded px-3 py-2 w-[220px]"

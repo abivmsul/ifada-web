@@ -56,17 +56,20 @@ export default function EventCard({
         <div className="p-4 flex flex-col gap-3">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base sm:text-lg font-semibold leading-snug">{title}</h3>
+            
+              <time className="text-xs sm:text-sm text-primary whitespace-nowrap">{startDisplay}</time>
+{/*            
             {isOnline ? (
               <span className="text-sm text-telegram font-medium whitespace-nowrap">Online</span>
             ) : (
-              <time className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">{startDisplay}</time>
-            )}
+              ''
+            )} */}
           </div>
 
           {excerpt && <p className="text-sm text-gray-600 line-clamp-3">{excerpt}</p>}
 
           <div className="mt-2 flex items-center justify-between text-sm">
-            <div className="text-gray-500 text-xs sm:text-sm truncate">{location?.name ?? ''}</div>
+            <div className="text-secondary text-xs sm:text-sm truncate">{location?.name ?? (isOnline ? 'Online' : '')}</div>
             <div className="text-primary font-medium whitespace-nowrap">View details →</div>
           </div>
         </div>

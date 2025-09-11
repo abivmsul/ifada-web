@@ -22,7 +22,7 @@ export default async function ProgramDetail({ params }: { params: { slug: string
           )}
 
           <h1 className="text-3xl font-bold mb-4">{program.title}</h1>
-          {program.excerpt && <p className="text-gray-700 mb-6">{program.excerpt}</p>}
+          {program.excerpt && <p className="text-secondary mb-6">{program.excerpt}</p>}
 
           {program.body && (
             <div className="prose max-w-none">

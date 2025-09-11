@@ -42,7 +42,7 @@ export default function PodcastCard({
         <div className="p-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold">{episodeNumber ? `Ep ${episodeNumber} — ${title}` : title}</h3>
-            <div className="text-xs text-gray-500">{publishedLabel}</div>
+            <div className="text-xs text-secondary">{publishedLabel}</div>
           </div>
           {excerpt && <p className="text-sm text-gray-600 mt-2 line-clamp-3">{excerpt}</p>}
           <div className="mt-3 text-sm text-primary font-medium">Play on YouTube →</div>

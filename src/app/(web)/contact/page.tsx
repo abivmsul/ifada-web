@@ -39,7 +39,7 @@ export default function ContactPage() {
             <div className="space-y-6">
               <div className="bg-white rounded-lg p-6 shadow-elevate">
                 <div className="flex items-center gap-4">
-                  <Image src="/ifada-logo.png" width={120} height={36} alt="Ifada logo" />
+                  <Image src="/images/ifada-logo.png" width={240} height={62} alt="Ifada logo" />
                 </div>
 
                 <h2 className="text-xl font-semibold mt-4">Get in touch</h2>
@@ -81,7 +81,7 @@ export default function ContactPage() {
                     href={office.telegram}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-telegram text-blue rounded shadow hover:opacity-95"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded shadow hover:opacity-95"
                   >
                     <FaTelegramPlane /> Join our Telegram
                   </a>
@@ -90,11 +90,11 @@ export default function ContactPage() {
 
               {/* Quick FAQ / Help */}
               <div className="bg-white rounded-lg p-6 shadow-elevate">
-                <h3 className="text-lg font-semibold mb-3">Quick help</h3>
+                <h3 className="text-lg font-semibold mb-3 text ">Quick help</h3>
                 <ul className="text-sm space-y-2 text-gray-700">
                   <li><strong>Events & Programs</strong> — Questions about events? Check <Link href="/events" className="text-primary hover:underline">Events</Link>.</li>
                   <li><strong>Donations</strong> — For donations & others see <Link href="/donate" className="text-primary hover:underline">Donate</Link>.</li>
-                  <li><strong>Volunteer</strong> — Interested in volunteering? <Link href="/volunteer" className="text-primary hover:underline">Contact us</Link> or join our Telegram.</li>
+                  <li><strong>Volunteer</strong> — Interested in volunteering? <Link href="https://t.me/ifadaislamicorg1" className="text-primary hover:underline">Contact us</Link> or join our Telegram.</li>
                 </ul>
               </div>
 
@@ -106,11 +106,11 @@ export default function ContactPage() {
                     <li key={h.id} className="flex items-center justify-between gap-4">
                       <div>
                         <div className="font-medium">{h.name}</div>
-                        <div className="text-sm text-gray-600">{h.role}</div>
+                        <div className="text-sm text-secondary">{h.role}</div>
                       </div>
                       <div className="text-right">
                         <a className="block text-sm text-gray-700 hover:underline" href={`mailto:${h.email}`}>{h.email}</a>
-                        <a className="block text-sm text-gray-700 hover:underline" href={`tel:${h.phone}`}>{h.phone}</a>
+                        <a className="block text-sm text-secondary hover:underline" href={`tel:${h.phone}`}>{h.phone}</a>
                       </div>
                     </li>
                   ))}
@@ -122,13 +122,13 @@ export default function ContactPage() {
             <div className="lg:col-span-2">
               <div className="bg-white rounded-lg p-6 shadow-elevate">
                 <h2 className="text-2xl font-semibold mb-2">Send us a message</h2>
-                <p className="text-sm text-gray-600 mb-4">Use the form below to send a message. For immediate announcements join our Telegram.</p>
+                <p className="text-sm text-gray-600 mb-4">Use the form below to send a message. For immediate response contact us via our <a href='https://t.me/ifadaislamicorg1' target='_blank' className='hover:underline'><span className='text-secondary'>Telegram.</span></a></p>
 
                 <ContactFormClient />
 
                 <div className="mt-6">
                   <h4 className="font-medium">Office Location</h4>
-                  <p className="text-sm text-gray-600 mb-3">{office.addressLine1}, {office.addressLine2}</p>
+                  <p className="text-sm text-secondary mb-3">{office.addressLine1}, {office.addressLine2}</p>
 
                   {/* Map: swap the src with your Google Maps embed if desired */}
                   <div className="w-full rounded overflow-hidden border">
@@ -142,14 +142,8 @@ export default function ContactPage() {
                 </div>
 
                 <div className="mt-6 text-sm text-gray-500">
-                  <strong>Privacy:</strong> We will not share your details. Submitted messages will be handled by our staff. (Submission handling will be implemented soon.)
+                  <strong>Privacy:</strong> We will not share your details. Submitted messages will be handled by our staff.
                 </div>
-              </div>
-
-              {/* Secondary CTA */}
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <Link href="/donate" className="inline-block px-4 py-3 bg-primary text-white rounded shadow">Donate</Link>
-                <Link href="/volunteer" className="inline-block px-4 py-3 border border-primary text-primary rounded">Volunteer</Link>
               </div>
             </div>
           </div>

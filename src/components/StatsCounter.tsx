@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 
 export default function StatsCounter({ stats }: { stats: { id:string; label:string; value:number }[] }) {
   return (
-    <div className="grid gap-6 grid-cols-2 sm:grid-cols-4">
+    <div className="grid gap-6 grid-cols-2 sm:grid-cols-3">
       {stats.map((s) => <Stat key={s.id} label={s.label} value={s.value} />)}
     </div>
   )
@@ -44,7 +44,7 @@ function Stat({ label, value }: { label: string; value: number }) {
 
   return (
     <div ref={ref} className="bg-white rounded-lg p-6 text-center shadow-elevate">
-      <div className="text-3xl font-bold text-primary">{count}</div>
+      <div className="text-3xl font-bold text-primary">{count}<span className='text-secondary'>+</span></div>
       <div className="text-sm text-gray-600 mt-1">{label}</div>
     </div>
   )

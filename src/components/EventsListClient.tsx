@@ -108,7 +108,7 @@ export default function EventsListClient({ initialData }: { initialData: ApiResu
   return (
     <div>
       {/* Controls */}
-      <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="mt-4 mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap items-center gap-3">
           <div className="inline-flex overflow-hidden rounded-lg bg-white border">
             <button

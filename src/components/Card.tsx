@@ -36,7 +36,7 @@ export default function Card({ title, excerpt, imageUrl, href = '#', className }
 
       <h3 id={`card-${title}`} className="text-lg font-semibold mb-2">{title}</h3>
 
-      {excerpt && <p className="text-gray-700 flex-1">{excerpt}</p>}
+      {excerpt && <p className="text-secondary flex-1">{excerpt}</p>}
 
       <div className="mt-4">
         <span className="inline-block text-sm text-primary underline">Learn more →</span>

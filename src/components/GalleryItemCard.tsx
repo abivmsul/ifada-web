@@ -28,7 +28,7 @@ export default function GalleryItemCard({
 
       <div className="mt-2">
         <div className="text-sm font-medium line-clamp-1">{title}</div>
-        {caption && <div className="text-xs text-gray-500 line-clamp-2">{caption}</div>}
+        {caption && <div className="text-xs text-secondary line-clamp-2">{caption}</div>}
       </div>
     </button>
   )

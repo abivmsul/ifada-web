@@ -24,7 +24,7 @@ export default async function PodcastDetail({ params }: { params: { slug: string
 
           <h1 className="text-3xl font-bold mb-2">{episode.title}</h1>
           <div className="text-sm text-gray-500 mb-4">
-            {episode.episodeNumber ? `Episode ${episode.episodeNumber} • ` : ''}
+            <span className='text-secondary'>{episode.episodeNumber ? `Episode ${episode.episodeNumber} • ` : ''}</span>
             {episode.publishedLabel ?? ''}
             {episode.duration ? ` • ${episode.duration}` : ''}
           </div>
@@ -43,7 +43,7 @@ export default async function PodcastDetail({ params }: { params: { slug: string
           )}
 
           <div className="mt-6">
-            <a href={episode.youtubeUrl ?? '#'} target="_blank" rel="noreferrer" className="text-primary underline">Open on YouTube</a>
+            <a href={episode.youtubeUrl ?? '#'} target="_blank" rel="noreferrer" className="bg-secondary text-white px-4 py-2 rounded">Open on YouTube</a>
           </div>
         </div>
       </SectionWrapper>

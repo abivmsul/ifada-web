@@ -23,7 +23,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
           <h1 className="text-3xl font-bold mb-3">{post.title}</h1>
           <div className="text-sm text-gray-500 mb-6">
-            {post.publishedLabel} {post.authorName ? ` • ${post.authorName}` : ''}
+            <span className='text-secondary'>{post.publishedLabel} </span> - {post.authorName ? ` • ${post.authorName}` : 'Ifada Communication'}
           </div>
 
           {/* Portable text content — this respects the exact block and mark types from Sanity */}

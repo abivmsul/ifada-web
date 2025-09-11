@@ -86,17 +86,16 @@ export default async function HomePage() {
     { id: 'r3', title: 'Volunteer Handbook', image: '/images/resources/volunteer.jpg', href: '/resources/volunteer-handbook' },
   ]
   const stats = [
-    { id: 's1', label: 'Students taught', value: 1200 },
-    { id: 's2', label: 'Volunteers', value: 350 },
-    { id: 's3', label: 'Events held', value: 150 },
-    { id: 's4', label: 'Years serving', value: 20 },
+    { id: 's1', label: 'Active participants who drive change', value: 500 },
+    { id: 's2', label: 'Leaders who inspire communities (Amirs)', value: 80 },
+    { id: 's3', label: 'Hadras', value: 50 },
   ]
 
   return (
     <>
       <HeroParallax
-        title="Empowering Our Community"
-        subtitle="Knowledge • Faith • Service"
+        title="Connecting youth with spirituality and fulfilling social responsibility"
+        subtitle="رَبِّي فَاجْعَلْ مُجْتَمَعَنَا غَايَةُ حُسْنِ الْخِتَامِ"
         ctaText="Explore Projects"
         ctaLink="/projects"
         imageUrl="https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG"
@@ -142,8 +141,8 @@ export default async function HomePage() {
 
       <CTABar
         title="Support our work — Join or donate"
-        subtitle="Help us deliver programs, events and services that uplift the community."
-        ctaText="Donate"
+        subtitle="Help us deliver Projects, events and services that uplift the community."
+        ctaText="Join / Donate"
         ctaLink="/donate"
       />
 

@@ -25,7 +25,7 @@ export default async function EventDetail({ params }: { params: { slug: string }
           )}
 
           <h1 className="text-3xl font-bold mb-2">{event.title}</h1>
-          <div className="text-sm text-gray-600 mb-4">
+          <div className="text-sm text-secondary mb-2">
             {event.isOnline ? <a href={event.registrationUrl} target="_blank" rel="noreferrer">Online event</a> : (<>{event.location?.name ?? ''} • {startLabel}{event.end ? ` — ${endLabel}` : ''}</>)}
           </div>
 
@@ -40,9 +40,9 @@ export default async function EventDetail({ params }: { params: { slug: string }
           {/* Registration CTA */}
           <div className="mt-8">
             {event.registrationUrl ? (
-              <a href={event.registrationUrl} target="_blank" rel="noreferrer" className="inline-block bg-primary text-white px-6 py-3 rounded">Register / More info</a>
+              <a href={event.registrationUrl} target="_blank" rel="noreferrer" className="inline-block bg-secondary text-white px-4 py-2 rounded">Register / More info</a>
             ) : (
-              <span className="text-sm text-gray-500">No registration link provided.</span>
+              <span className="text-sm text-gray-500">.</span>
             )}
           </div>
         </div>

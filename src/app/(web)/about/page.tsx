@@ -10,18 +10,17 @@ export const metadata = {
   title: 'About — Ifada Islamic Foundation',
   description: 'Learn about our mission, history and team.',
 }
-
+const about = "/images/about.jpg"
 export default function AboutPage() {
   return (
     <main>
       <Hero
-        title="About Ifada Islamic Foundation"
-        subtitle="Building a resilient, compassionate community"
+        title="About Ifada Islamic Organization"
+        subtitle="Connecting youth with spirituality and fulfilling social responsibility"
         // pass both names in case your Hero expects one or the other
-        imageUrl="https://ifadaislamic.org/images/hadra-gallery/miras.jpg"
-        backgroundImage="https://ifadaislamic.org/images/hadra-gallery/miras.jpg"
-        ctaText="Our Programs"
-        ctaLink="/programs"
+        imageUrl={about}
+        ctaText="Explore Our Gallery"
+        ctaLink="/gallery"
       />
 
       {/* gentle diagonal separator */}
@@ -41,7 +40,7 @@ export default function AboutPage() {
 
           <div className="mt-8 flex flex-col sm:flex-row sm:justify-center sm:gap-4 gap-3">
             <Link href="/programs"><Button>Explore Programs</Button></Link>
-            <Link href="/contact"><Button variant="outline">Get in Touch</Button></Link>
+            <Link href="/contact"><Button>Get in Touch</Button></Link>
           </div>
         </div>
       </SectionWrapper>
@@ -147,7 +146,7 @@ export default function AboutPage() {
             <p className="text-gray-600 mb-4">Volunteer, donate, or partner with Ifada to support programs and events.</p>
             <div className="flex justify-center gap-4">
               <Link href="/donate"><Button>Donate</Button></Link>
-              <Link href="/contact"><Button variant="outline">Volunteer</Button></Link>
+              <Link href="/contact"><Button>Volunteer</Button></Link>
             </div>
           </div>
         </div>
