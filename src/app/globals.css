@@ -1,5 +1,42 @@
 @import "tailwindcss";
 
+
+/* at top of globals.css (imported by layout) */
+@import 'nprogress/nprogress.css';
+
+/* NProgress custom tuning (optional) */
+#nprogress .bar {
+  height: 3px;
+  background: linear-gradient(90deg, #00a6ff, #0057B8);
+  box-shadow: 0 0 12px rgba(0, 87, 184, 0.45);
+}
+#nprogress .peg {
+  box-shadow: 0 0 12px rgba(0, 87, 184, 0.45);
+}
+
+/* stable bg image helper if you used in Projects section */
+.bg-image-stable, img.bg-image-stable {
+  filter: blur(6px) brightness(0.85) saturate(0.98);
+  will-change: filter, transform;
+}
+
+/* Skeleton helpers */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03), rgba(255,255,255,0.06));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+.skeleton--block { border-radius: 6px; }
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* small pulsing skeleton used by Tailwind class if you prefer */
+.animate-pulse-fast { animation: pulse 1.1s cubic-bezier(.4,0,.6,1) infinite; }
+
+
+
 :root {
   --color-primary: #0057B8;
   --color-secondary: #fcb90e;
@@ -124,3 +161,27 @@ main {
 /* If you want the background to only cover a fixed height region inside the section,
    you can change `inset: 0` to `top: 0; left: 0; right: 0; height: 420px;` etc. */
 /* * { outline: 1px dashed rgba(255,0,0,0.06); } */
+
+/* add to src/app/globals.css (or main global stylesheet) */
+/* small shimmer animation used by our Skeleton component */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+
+/* Optional small helper to keep shapes pleasant */
+.skeleton-rounded { border-radius: 8px; }
+
+/* add to src/app/globals.css (or the file your project uses) */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 1.1s linear infinite;
+}

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import cn from 'classnames'
+import NavLink from './NavLink'
 
 type Props = {
   title: string
@@ -43,7 +44,7 @@ export default function EventCard({
       whileHover={{ y: -6 }}
       className={cn('bg-white rounded-lg shadow-md overflow-hidden', className)}
     >
-      <Link href={href} className="block">
+      <NavLink href={href} className="block">
         {/* Responsive image heights: small devices shorter, larger devices taller */}
         {imageUrl ? (
           <div className="relative w-full h-40 sm:h-44 md:h-56 lg:h-48">
@@ -73,7 +74,7 @@ export default function EventCard({
             <div className="text-primary font-medium whitespace-nowrap">View details →</div>
           </div>
         </div>
-      </Link>
+      </NavLink>
     </motion.article>
   )
 }

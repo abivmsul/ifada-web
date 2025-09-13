@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import cn from 'classnames'
 import { extractYouTubeId, youtubeThumbnail } from '@/lib/youtube'
+import NavLink from './NavLink'
 
 export default function PodcastCard({
   title,
@@ -30,7 +31,7 @@ export default function PodcastCard({
 
   return (
     <motion.article whileHover={{ y: -6 }} className="bg-white rounded-lg shadow-md overflow-hidden">
-      <Link href={`/podcast/${slug}`} className="block">
+      <NavLink href={`/podcast/${slug}`} className="block">
         {thumb ? (
           <div className="relative w-full h-44 sm:h-48">
             <Image src={thumb} alt={title || 'podcast'} fill style={{ objectFit: 'cover' }} sizes="(max-width: 640px) 100vw, 33vw" />
@@ -47,7 +48,7 @@ export default function PodcastCard({
           {excerpt && <p className="text-sm text-gray-600 mt-2 line-clamp-3">{excerpt}</p>}
           <div className="mt-3 text-sm text-primary font-medium">Play on YouTube →</div>
         </div>
-      </Link>
+      </NavLink>
     </motion.article>
   )
 }

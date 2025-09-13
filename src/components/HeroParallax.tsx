@@ -8,6 +8,7 @@ import BackgroundPattern from './BackgroundPattern'
 import React from 'react'
 // Import the Outfit font from next/font/google
 import { Outfit } from 'next/font/google'
+import NavLink from './NavLink'
 
 const outfit = Outfit({ subsets: ['latin'] })
 
@@ -92,7 +93,7 @@ export default function HeroParallax({
         } w-1/2 pointer-events-none z-5`}
       >
         <Image
-          src="/ifada-logo.svg"
+          src="/images/ifada-logo.png"
           alt="watermark"
           fill
           style={{
@@ -129,16 +130,16 @@ export default function HeroParallax({
 
         <div className="mt-6 flex flex-col sm:flex-row gap-4 items-center justify-center">
           {ctaText && ctaLink && (
-            <Link href={ctaLink} className="inline-block">
+            <NavLink href={ctaLink} className="inline-block">
               <Button className='bg-secondary'>{ctaText}</Button>
-            </Link>
+            </NavLink>
           )}
 
           <a
             href="#projects"
-            className="inline-flex items-center text-white/90 underline hover:text-white transition"
+            className="inline-flex items-center text-white  hover:underline transition"
           >
-            View projects
+           Featured Projects →
           </a>
         </div>
       </motion.div>

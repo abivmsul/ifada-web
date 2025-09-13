@@ -4,6 +4,7 @@
 import Link from 'next/link'
 import EventCard from './EventCard'
 import { EventItem } from '@/lib/fetchers/events'
+import NavLink from './NavLink'
 
 export default function EventsSection({ events }: { events: EventItem[] }) {
   const displayed = (events || []).slice(0, 3)
@@ -28,14 +29,14 @@ export default function EventsSection({ events }: { events: EventItem[] }) {
         ))}
       </div>
        <div className="mt-6 text-center">
-        <Link
+        <NavLink
             href="/events"
             className="inline-block px-6 py-2 border border-primary text-primary rounded-lg 
                       transition-all duration-300 ease-in-out 
                       hover:bg-primary hover:text-primary hover:shadow-lg hover:scale-[1.02]"
           >
             View all Events
-        </Link>
+        </NavLink>
 
       </div>
     </div>

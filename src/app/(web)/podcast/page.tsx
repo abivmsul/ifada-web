@@ -3,6 +3,7 @@ import SectionWrapper from '@/components/SectionWrapper'
 import { fetchPodcastList } from '@/lib/fetchers/podcasts'
 import PodcastCard from '@/components/PodcastCard'
 import Link from 'next/link'
+import NavLink from '@/components/NavLink'
 
 export const revalidate = 60
 
@@ -18,7 +19,7 @@ export default async function PodcastPage() {
               <h1 className="text-3xl font-bold">Podcast</h1>
               <p className="text-sm text-secondary">Listen to our latest episodes on YouTube.</p>
             </div>
-            <Link href="/contact" className="text-sm text-primary underline">Suggest an episode</Link>
+            <NavLink href="/contact" className="text-sm text-primary underline">Suggest an episode</NavLink>
           </div>
             <svg viewBox="0 0 1200 30" className="w-full h-auto" preserveAspectRatio="none">
               <path d="M0,8 L600,0 L1200,8 L600,16 Z" fill="rgba(255, 200, 0, 0.95)" />

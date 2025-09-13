@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import cn from 'classnames'
 import { motion } from 'framer-motion'
+import NavLink from './NavLink'
 
 type Props = {
   title: string
@@ -18,7 +19,7 @@ type Props = {
 export default function ProjectCard({ title, excerpt, imageUrl, href = '#', status, startLabel }: Props) {
   return (
     <motion.article whileHover={{ y: -6 }} className="bg-white rounded-lg shadow-md overflow-hidden">
-      <Link href={href} className="block">
+      <NavLink href={href} className="block">
         {imageUrl ? (
           <div className="relative w-full h-44 sm:h-52 overflow-hidden">
             <Image src={imageUrl} alt={title} fill style={{ objectFit: 'cover' }} />
@@ -38,7 +39,7 @@ export default function ProjectCard({ title, excerpt, imageUrl, href = '#', stat
 
           <div className="mt-3 text-sm text-primary font-medium">View project →</div>
         </div>
-      </Link>
+      </NavLink>
     </motion.article>
   )
 }

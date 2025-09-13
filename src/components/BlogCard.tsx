@@ -4,6 +4,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import cn from 'classnames'
+import NavLink from './NavLink'
 
 type Props = {
   title: string
@@ -17,7 +18,7 @@ type Props = {
 export default function BlogCard({ title, excerpt, imageUrl, href = '#', dateLabel, tags = [] }: Props) {
   return (
     <article className="bg-white rounded-lg shadow-md overflow-hidden group">
-      <Link href={href} className="block">
+      <NavLink href={href} className="block">
         {imageUrl ? (
           <div className="relative h-44 w-full">
             <Image src={imageUrl} alt={title} fill style={{ objectFit: 'cover' }} sizes="(max-width: 640px) 100vw, 33vw" />
@@ -38,7 +39,7 @@ export default function BlogCard({ title, excerpt, imageUrl, href = '#', dateLab
           {excerpt && <p className="text-sm text-gray-700 mb-4 line-clamp-3">{excerpt}</p>}
           <div className="text-sm text-primary font-medium">Read article →</div>
         </div>
-      </Link>
+      </NavLink>
     </article>
   )
 }

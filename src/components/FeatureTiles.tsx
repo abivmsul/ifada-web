@@ -39,6 +39,7 @@ export default function FeatureTiles() {
   return (
     <section ref={ref} className="relative py-8">
       {/* Top decorative bar */}
+      
       <motion.div
         style={{ opacity: topOpacity, scale: topScale }}
         aria-hidden

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { ProjectItem } from '@/lib/fetchers/projects'
 import styles from './ProjectsSection.module.css'
+import NavLink from './NavLink'
 
 type Props = {
   projects: ProjectItem[]
@@ -64,7 +65,7 @@ export default function ProjectsSection({
                   transition={{ delay: i * 0.06, duration: 0.45 }}
                   className={styles.card}
                 >
-                  <Link href={p.slug ? `/projects/${p.slug}` : '#'} className={styles.cardLink} aria-label={`Open project ${p.title}`}>
+                  <NavLink href={p.slug ? `/projects/${p.slug}` : '#'} className={styles.cardLink} aria-label={`Open project ${p.title}`}>
                     <div className={styles.media}>
                       {p.coverImageUrl ? (
                         <img
@@ -100,21 +101,21 @@ export default function ProjectsSection({
                         <span className={styles.cta}>Explore project →</span>
                       </div>
                     </div>
-                  </Link>
+                  </NavLink>
                 </motion.article>
               )
             })}
           </div>
 
           <div className="mt-6 text-center">
-        <Link
+        <NavLink
             href="/projects"
             className="inline-block px-6 py-2 border border-white text-white rounded-lg 
                       transition-all duration-300 ease-in-out 
                       hover:bg-primary hover:text-white hover:shadow-lg hover:scale-[1.02]"
           >
             View all Projects
-        </Link>
+        </NavLink>
 
       </div>
         </div>

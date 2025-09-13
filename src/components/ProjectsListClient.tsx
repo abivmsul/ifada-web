@@ -4,6 +4,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import debounce from 'just-debounce-it'
 import ProjectCard from './ProjectCard'
+import ProjectsListSkeleton from '@/components/skeletons/ProjectsListSkeleton'
 import cn from 'classnames'
 
 type ProjectDTO = {
@@ -24,11 +25,16 @@ type ApiResult = {
   pageSize: number
 }
 
+/**
+ * Client component for project listing
+ * - shows shadcn skeleton grid when loading
+ * - uses server initialData to avoid flash
+ */
 export default function ProjectsListClient({ initialData }: { initialData: ApiResult }) {
-  const [items, setItems] = useState<ProjectDTO[]>(initialData.items)
-  const [total, setTotal] = useState<number>(initialData.total)
-  const [page, setPage] = useState<number>(initialData.page || 1)
-  const [pageSize, setPageSize] = useState<number>(initialData.pageSize || 9)
+  const [items, setItems] = useState<ProjectDTO[]>(initialData?.items ?? [])
+  const [total, setTotal] = useState<number>(initialData?.total ?? 0)
+  const [page, setPage] = useState<number>(initialData?.page ?? 1)
+  const [pageSize, setPageSize] = useState<number>(initialData?.pageSize ?? 9)
   const [search, setSearch] = useState<string>('')
   const [featuredOnly, setFeaturedOnly] = useState<boolean | undefined>(undefined)
   const [statusFilter, setStatusFilter] = useState<'all'|'upcoming'|'ongoing'|'completed'>('all')
@@ -50,9 +56,10 @@ export default function ProjectsListClient({ initialData }: { initialData: ApiRe
       const res = await fetch(`/api/projects?${params.toString()}`, { cache: 'no-store' })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || 'Failed to fetch')
-      setItems(json.items)
-      setTotal(json.total)
-      setPage(json.page)
+      // the API returns { items, total, page, pageSize } (matching your route)
+      setItems(json.items ?? [])
+      setTotal(Number(json.total ?? 0))
+      setPage(Number(json.page ?? p))
     } catch (err) {
       console.error('fetch projects', err)
     } finally {
@@ -60,21 +67,34 @@ export default function ProjectsListClient({ initialData }: { initialData: ApiRe
     }
   }
 
-  const debouncedFetch = useMemo(() => debounce((p:number, q:string, f?:boolean, status?:string) => {
-    void fetchPage(p, q, f, status)
-  }, 300), [pageSize])
+  // Debounced fetch for search/filter changes
+  const debouncedFetch = useMemo(
+    () =>
+      debounce((p: number, q: string, f?: boolean, status?: string) => {
+        void fetchPage(p, q, f, status)
+      }, 300),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pageSize]
+  )
 
+  // Sync when pageSize changes: reset to page 1 and fetch
   useEffect(() => {
+    setPage(1)
     void fetchPage(1, search, featuredOnly, statusFilter === 'all' ? undefined : statusFilter)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageSize])
 
+  // Fetch when page changes
   useEffect(() => {
     void fetchPage(page, search, featuredOnly, statusFilter === 'all' ? undefined : statusFilter)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 
+  // Search / filters: reset page and debounced fetch
   useEffect(() => {
     setPage(1)
     debouncedFetch(1, search, featuredOnly, statusFilter === 'all' ? undefined : statusFilter)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, featuredOnly, statusFilter])
 
   const pagesToShow = useMemo(() => {
@@ -108,7 +128,11 @@ export default function ProjectsListClient({ initialData }: { initialData: ApiRe
           />
 
           <label className="inline-flex items-center gap-2">
-            <input type="checkbox" checked={Boolean(featuredOnly)} onChange={(e) => setFeaturedOnly(e.target.checked ? true : undefined)} />
+            <input
+              type="checkbox"
+              checked={Boolean(featuredOnly)}
+              onChange={(e) => setFeaturedOnly(e.target.checked ? true : undefined)}
+            />
             <span className="text-sm">Featured only</span>
           </label>
 
@@ -135,8 +159,11 @@ export default function ProjectsListClient({ initialData }: { initialData: ApiRe
 
       {/* Grid */}
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {loading && items.length === 0 ? (
-          <div className="col-span-full text-center py-8">Loading…</div>
+        {loading && (items.length === 0) ? (
+          // show skeletons matching pageSize count while there are no cached items
+          <div className="col-span-full">
+            <ProjectsListSkeleton count={pageSize} />
+          </div>
         ) : items.length === 0 ? (
           <div className="col-span-full text-center py-8 text-gray-600">No projects found.</div>
         ) : (
