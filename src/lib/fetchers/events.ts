@@ -2,6 +2,16 @@
 import { sanityServerClient, urlFor } from '@/lib/sanity.server'
 import { eventsListQuery, eventsCountQuery, EVENT_BY_SLUG ,EVENTS_FEATURED, EVENTS_LIST} from '@/lib/queries/events'
 
+// Define proper type for Sanity image
+interface SanityImage {
+  _type: 'image';
+  asset: {
+    _ref: string;
+    _type: 'reference';
+  };
+  [key: string]: unknown;
+}
+
 // Define proper types for events
 interface SanityEvent {
   _id: string;
@@ -9,7 +19,7 @@ interface SanityEvent {
   slug?: string;
   start?: string;
   end?: string;
-  coverImage?: any; // Sanity image type - would need proper typing
+  coverImage?: SanityImage; // Use proper type instead of any
   excerpt?: string;
   featured?: boolean;
   location?: {
@@ -236,7 +246,7 @@ export type EventItem = {
   isOnline?: boolean;
   registrationUrl?: string | null;
   excerpt?: string | null;
-  coverImage?: any;
+  coverImage?: SanityImage | null; // Use proper type instead of any
   imageUrl?: string | null;
   featured?: boolean;
   order?: number | null;
