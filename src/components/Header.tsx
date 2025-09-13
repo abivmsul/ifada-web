@@ -16,7 +16,7 @@ type NavItem = { name: string; to: string; description?: string }
 const RESOURCES_SUB: NavItem[] = [
   { name: 'Events', to: '/events', description: 'Upcoming activities & programs' },
   { name: 'Gallery', to: '/gallery', description: 'Photos & videos from our work' },
-  { name: 'Blog', to: '/blog', description: 'Sermons, news & articles' },
+  { name: 'Posts', to: '/blog', description: 'Posts, news & articles' },
   { name: 'Podcasts', to: '/podcast', description: 'Listen on-demand' },
 ]
 

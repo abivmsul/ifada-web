@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Button from './Button'
-import Link from 'next/link'
 import BackgroundPattern from './BackgroundPattern'
 import React from 'react'
 // Import the Outfit font from next/font/google
