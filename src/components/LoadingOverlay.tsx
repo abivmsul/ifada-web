@@ -42,7 +42,7 @@ export default function LoadingOverlay() {
 
         <div className="text-white text-center">
           <p className="text-lg font-semibold">Loading…</p>
-          <p className="text-sm text-white/80">Please wait while it loads.</p>
+          <p className="text-sm text-white/80">Please wait while it loads the page.</p>
         </div>
       </div>
     </div>
