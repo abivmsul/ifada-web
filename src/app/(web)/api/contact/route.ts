@@ -1,30 +1,26 @@
 // src/app/(web)/api/contact/route.ts
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
-type ContactRequest = {
-  name?: string
-  email?: string
-  message?: string
-  [k: string]: unknown
+type ContactPayload = {
+  name: string
+  email: string
+  message: string
+  phone?: string
 }
 
 export async function POST(req: Request) {
-  const raw = await req.json()
-  const body = raw as ContactRequest
-
-  // basic runtime validation
-  if (!body.email || !body.message) {
-    return new Response(JSON.stringify({ error: 'Missing email or message' }), { status: 400 })
-  }
-  if (typeof body.email !== 'string' || typeof body.message !== 'string') {
-    return new Response(JSON.stringify({ error: 'Invalid types' }), { status: 400 })
-  }
-
-  // Now you can safely use body.email and body.message as strings
   try {
-    // your email/send logic here...
-    return new Response(JSON.stringify({ ok: true }), { status: 200 })
+    const body = (await req.json()) as Partial<ContactPayload>
+
+    // basic validation
+    if (!body?.email || !body?.message) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    }
+
+    // do whatever processing (send email, store, etc.)
+    return NextResponse.json({ success: true })
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 })
+    console.error('contact route error', err)
+    return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
   }
 }
