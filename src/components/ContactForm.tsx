@@ -4,6 +4,15 @@ import { useState, useEffect } from 'react'
 
 type Handler = { _id: string; name: string; email?: string }
 
+// Define a proper type for the contact form payload
+type ContactPayload = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  handlerId?: string;
+}
+
 export default function ContactForm({ handlers }: { handlers?: Handler[] }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -29,7 +38,8 @@ export default function ContactForm({ handlers }: { handlers?: Handler[] }) {
 
     setLoading(true)
     try {
-      const payload: any = { name, email, subject, message }
+      // Replace 'any' with proper type
+      const payload: ContactPayload = { name, email, subject, message }
       if (recipient) payload.handlerId = recipient
 
       const res = await fetch('/api/contact', {
@@ -45,7 +55,8 @@ export default function ContactForm({ handlers }: { handlers?: Handler[] }) {
         setStatus({ ok: true, msg: 'Message sent. Thank you!' })
         setName(''); setEmail(''); setSubject(''); setMessage('')
       }
-    } catch (err) {
+    } catch {
+      // Remove unused 'err' parameter
       setStatus({ ok: false, msg: 'Network error. Try again later.' })
     } finally {
       setLoading(false)

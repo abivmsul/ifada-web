@@ -1,10 +1,8 @@
 // src/components/PodcastCard.tsx
 'use client'
-import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import cn from 'classnames'
 import { extractYouTubeId, youtubeThumbnail } from '@/lib/youtube'
 import NavLink from './NavLink'
 
@@ -25,7 +23,6 @@ export default function PodcastCard({
   coverImageUrl?: string
   publishedLabel?: string
 }) {
-  const router = useRouter()
   const id = extractYouTubeId(youtubeUrl) ?? undefined
   const thumb = coverImageUrl ?? (id ? youtubeThumbnail(id) : undefined)
 

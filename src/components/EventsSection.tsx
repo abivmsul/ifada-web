@@ -1,7 +1,6 @@
 // src/components/EventsSection.tsx
 'use client'
 
-import Link from 'next/link'
 import EventCard from './EventCard'
 import { EventItem } from '@/lib/fetchers/events'
 import NavLink from './NavLink'

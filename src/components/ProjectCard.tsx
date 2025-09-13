@@ -1,9 +1,7 @@
 // src/components/ProjectCard.tsx
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
-import cn from 'classnames'
 import { motion } from 'framer-motion'
 import NavLink from './NavLink'
 

@@ -75,7 +75,8 @@ export default function Header() {
     <Disclosure as="header" className="sticky top-0 z-50">
       {({ open }) => (
         <>
-          <div className="w-full bg-gradient-to-r from-[#06386d] via-[#0057B8] to-[#06386d] text-white/95 shadow-lg" role="banner" aria-expanded={open}>
+          {/* Remove aria-expanded from banner role as it's not supported */}
+          <div className="w-full bg-gradient-to-r from-[#06386d] via-[#0057B8] to-[#06386d] text-white/95 shadow-lg" role="banner">
             <div className="container mx-auto px-4 md:px-6">
               <div className="flex items-center justify-between h-16 md:h-20">
                 {/* Logo */}
@@ -151,19 +152,29 @@ export default function Header() {
                     Contact
                   </NavLink>
 
-                  <Button as="a" href="https://t.me/ifadaislamicorg1" className="bg-secondary hover:bg-telegram" {...{ target: '_blank', rel: 'noopener noreferrer' }}>
-                    <span className="flex items-center gap-2">
+                  <NavLink href="https://t.me/ifadaislamicorg1" ><Button   className="bg-secondary hover:bg-telegram"{...{ target: '_blank', rel: 'noopener noreferrer' }}>
+                    <span className="flex items-center gap-2"> 
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 240 240" fill="currentColor">
                         <path d="M120 0C53.73 0 0 53.73 0 120s53.73 120 120 120 120-53.73 120-120S186.27 0 120 0zm56.24 80.8l-19.7 93.01c-1.49 6.92-5.4 8.66-10.94 5.4l-30.27-22.35-14.6 14.06c-1.61 1.61-2.94 2.94-5.99 2.94l2.12-30.27 55.12-49.73c2.4-2.4-.52-3.75-3.72-1.35l-68.08 42.8-29.3-9.15c-6.36-2-6.49-6.36 1.32-9.4l114.47-44.15c5.32-2 10.02 1.35 8.32 9.15z" />
                       </svg>
                       Join Telegram
                     </span>
                   </Button>
+                  </NavLink>
                 </div>
 
                 {/* Mobile menu button */}
                 <div className="md:hidden">
-                  <Disclosure.Button ref={mobileButtonRef as any} className="p-2 rounded-md text-white hover:bg-white/10" aria-label="Toggle menu">
+                  {/* Fix the any type error by using proper ref handling */}
+                  <Disclosure.Button 
+                    ref={(node) => {
+                      if (node) {
+                        mobileButtonRef.current = node as HTMLButtonElement;
+                      }
+                    }}
+                    className="p-2 rounded-md text-white hover:bg-white/10" 
+                    aria-label="Toggle menu"
+                  >
                     {open ? <X size={20} /> : <MenuIcon size={20} />}
                   </Disclosure.Button>
                 </div>

@@ -65,14 +65,11 @@ import SectionWrapper from '@/components/SectionWrapper'
 import FeatureTiles from '@/components/FeatureTiles'
 import ProjectsSection from '@/components/ProjectsSection'
 import EventsSection from '@/components/EventsSection'
-import ResourcesGrid from '@/components/ResourcesGrid'
 import StatsCounter from '@/components/StatsCounter'
 import CTABar from '@/components/CTABar'
-import Footer from '@/components/Footer'
 
 import { fetchFeaturedProjects } from '@/lib/fetchers/projects'
 import { fetchFeaturedEvents } from '@/lib/fetchers/events'
-import bg from '@/assets/background.jpg'
 export const revalidate = 60
 
 export default async function HomePage() {
@@ -80,17 +77,12 @@ export default async function HomePage() {
   const events = await fetchFeaturedEvents(3)
 
   // sample resources + stats (replace with real fetchers later)
-  const resources = [
-    { id: 'r1', title: 'Ramadan Guide 2025', image: '/images/resources/ramadan.jpg', href: '/resources/ramadan-2025' },
-    { id: 'r2', title: 'Sermon Recording', image: '/images/resources/sermon.jpg', href: '/resources/sermon-may-2025' },
-    { id: 'r3', title: 'Volunteer Handbook', image: '/images/resources/volunteer.jpg', href: '/resources/volunteer-handbook' },
-  ]
   const stats = [
     { id: 's1', label: 'Active participants who drive change', value: 500 },
     { id: 's2', label: 'Leaders who inspire communities (Amirs)', value: 80 },
     { id: 's3', label: 'Hadras', value: 50 },
   ]
-
+  const amirs = '/images/ifada-amirs.jpg'
   return (
     <>
       <HeroParallax
@@ -98,7 +90,7 @@ export default async function HomePage() {
         subtitle="رَبِّي فَاجْعَلْ مُجْتَمَعَنَا غَايَةُ حُسْنِ الْخِتَامِ"
         ctaText="Explore Projects"
         ctaLink="/projects"
-        imageUrl="https://ifadaislamic.org/images/showcase-img/Ifada-amirs.JPG"
+        imageUrl={amirs}
         watermarkSide="left"
       />
 

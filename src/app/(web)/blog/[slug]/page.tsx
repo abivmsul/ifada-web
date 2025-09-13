@@ -8,12 +8,30 @@ import { fetchPostBySlug } from '@/lib/fetchers/posts'
 
 export const revalidate = 60
 
-// define a minimal Post type — extend to match your real shape
+// Define a proper type for Portable Text blocks
+type PortableTextBlock = {
+  _key: string;
+  _type: string;
+  children: Array<{
+    _key: string;
+    _type: string;
+    text: string;
+    marks?: string[];
+  }>;
+  markDefs?: Array<{
+    _key: string;
+    _type: string;
+    [key: string]: unknown;
+  }>;
+  style?: string;
+  [key: string]: unknown;
+};
+
 type Post = {
   title: string
   slug: string
   coverImageUrl?: string | null
-  body: any
+  body: PortableTextBlock[] // Replace 'any' with proper type
   publishedLabel?: string | null
   authorName?: string | null
   tags?: string[] | null

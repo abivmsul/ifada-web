@@ -4,13 +4,27 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
-export default function TeamGrid({ team = [] as any[] }) {
+// Define proper types for team members
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  photo?: string;
+}
+
+interface TeamGridProps {
+  team?: TeamMember[];
+}
+
+export default function TeamGrid({ team = [] }: TeamGridProps) {
   const sample = team.length ? team : [
-   { id: '1', name: 'Fuad Muna', role: 'Chief Executive Director', bio: 'Founder...', photo: '/images/fuad.jpg' },
+    { id: '1', name: 'Fuad Muna', role: 'Chief Executive Director', bio: 'Founder...', photo: '/images/fuad.jpg' },
     { id: '2', name: 'Ekram Husen', role: 'Director', bio: 'Manages all acti...', photo: '/images/director.jpg' },
     { id: '3', name: 'Ibrahim Ibro', role: 'Project Lead', bio: 'Leads PRojects...', photo: '/images/ibro.jpg' },
   ]
-  const [active, setActive] = useState<any | null>(null)
+  
+  const [active, setActive] = useState<TeamMember | null>(null)
 
   return (
     <>
@@ -23,7 +37,13 @@ export default function TeamGrid({ team = [] as any[] }) {
             className="bg-white rounded-lg p-4 shadow-sm text-left flex gap-4 items-start"
           >
             <div className="w-16 h-16 relative rounded-full overflow-hidden ring-1 ring-primary/30">
-              {m.photo ? <Image src={m.photo} alt={m.name} fill style={{ objectFit: 'cover' }} /> : <div className="flex items-center justify-center h-full">{m.name.split(' ').map((n: string) => n[0]).join('')}</div>}
+              {m.photo ? (
+                <Image src={m.photo} alt={m.name} fill style={{ objectFit: 'cover' }} />
+              ) : (
+                <div className="flex items-center justify-center h-full bg-gray-200">
+                  {m.name.split(' ').map((n) => n[0]).join('')}
+                </div>
+              )}
             </div>
             <div className="flex-1">
               <div className="flex items-center justify-between">

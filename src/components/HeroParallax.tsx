@@ -40,7 +40,7 @@ export default function HeroParallax({
     <header className="relative h-[72vh] md:h-[82vh] overflow-hidden flex items-center justify-center text-center">
       {/* background + overlays */}
       <motion.div
-        style={{ y: bgY } as any}
+        style={{ y: bgY }} // Remove 'as any'
         className="absolute inset-0 z-0"
         aria-hidden
       >
@@ -86,7 +86,7 @@ export default function HeroParallax({
 
       {/* watermark logo */}
       <motion.div
-        style={{ y: contentY }}
+        style={{ y: contentY }} // Remove 'as any'
         className={`absolute inset-y-0 ${
           watermarkSide === 'left' ? 'left-0' : 'right-0'
         } w-1/2 pointer-events-none z-5`}
@@ -113,7 +113,7 @@ export default function HeroParallax({
 
       {/* centered content */}
       <motion.div
-        style={{ y: contentY } as any}
+        style={{ y: contentY }} // Remove 'as any'
         className="relative z-20 flex flex-col items-center justify-center px-6 max-w-4xl"
       >
         <h1 className={`${outfit.className} text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]`}>

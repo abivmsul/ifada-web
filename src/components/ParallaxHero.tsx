@@ -1,7 +1,6 @@
 'use client'
 import { ParallaxBanner } from 'react-scroll-parallax'
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import NavLink from './NavLink'
 
 interface ParallaxHeroProps {

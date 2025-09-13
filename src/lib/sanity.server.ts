@@ -2,6 +2,16 @@
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
+// Define a proper type for Sanity image source
+interface SanityImageSource {
+  _type: 'image';
+  asset: {
+    _ref: string;
+    _type: 'reference';
+  };
+  [key: string]: unknown;
+}
+
 export const sanityServerClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
@@ -11,4 +21,4 @@ export const sanityServerClient = createClient({
 })
 
 const builder = imageUrlBuilder(sanityServerClient)
-export const urlFor = (source: any) => builder.image(source)
+export const urlFor = (source: SanityImageSource | string) => builder.image(source)

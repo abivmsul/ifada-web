@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import logo from '@/assets/ifada-logo.png'
 import Button from './Button'
-import { FaFacebook, FaFacebookF, FaFacebookSquare, FaInstagram, FaTelegram, FaTiktok, FaYoutube } from 'react-icons/fa'
+import { FaFacebookF, FaTelegram, FaTiktok, FaYoutube } from 'react-icons/fa'
 import { Disclosure } from '@headlessui/react'
 import NavLink from './NavLink'
 

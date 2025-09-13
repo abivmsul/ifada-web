@@ -2,7 +2,6 @@
 import SectionWrapper from '@/components/SectionWrapper'
 import { fetchPodcastList } from '@/lib/fetchers/podcasts'
 import PodcastCard from '@/components/PodcastCard'
-import Link from 'next/link'
 import NavLink from '@/components/NavLink'
 
 export const revalidate = 60

@@ -20,8 +20,10 @@ export default function Button({ as = 'button', href, children, className, ...re
   )
 
   if (as === 'a') {
+    // Cast to appropriate type for anchor props
+    const anchorProps = rest as React.AnchorHTMLAttributes<HTMLAnchorElement>;
     return (
-      <Link href={href || '#'} className={classes} {...(rest as any)}>
+      <Link href={href || '#'} className={classes} {...anchorProps}>
         {children}
       </Link>
     )

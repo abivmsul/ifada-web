@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { extractYouTubeId, youtubeEmbedUrl, youtubeThumbnail } from '@/lib/youtube'
-import cn from 'classnames'
 
 export default function YouTubeEmbed({ url, title }: { url: string; title?: string }) {
   const id = extractYouTubeId(url)

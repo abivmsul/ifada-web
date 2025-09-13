@@ -12,10 +12,22 @@ type NavLinkProps = LinkProps & {
   onNavigate?: () => void | Promise<void>
 }
 
+// Type guard to check if href is an object with pathname
+function hasPathname(href: LinkProps['href']): href is { pathname: string } {
+  return typeof href === 'object' && href !== null && 'pathname' in href
+}
+
 export default function NavLink({ href, children, replace, className, onNavigate, ...rest }: NavLinkProps) {
   const router = useRouter()
   const { show, hide } = useLoading()
-  const hrefValue = typeof href === 'string' ? href : (href as any)?.pathname ?? '/'
+  
+  // Get href value safely without using any
+  let hrefValue = '/'
+  if (typeof href === 'string') {
+    hrefValue = href
+  } else if (hasPathname(href)) {
+    hrefValue = href.pathname
+  }
 
   const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     // allow modifier clicks to behave normally
@@ -36,8 +48,8 @@ export default function NavLink({ href, children, replace, className, onNavigate
   }
 
   // If child is already an <a>, clone it and attach the handler & merge classes
-  if (React.isValidElement(children) && (children.type === 'a' || (children as any).type === 'a')) {
-    const child = children as React.ReactElement<any, any>
+  if (React.isValidElement(children) && children.type === 'a') {
+    const child = children as React.ReactElement<React.AnchorHTMLAttributes<HTMLAnchorElement>>
     const mergedClass = [className ?? '', (child.props.className ?? '')].filter(Boolean).join(' ')
     const childOnClick = child.props.onClick
     const composedOnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {

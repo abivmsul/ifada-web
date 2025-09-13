@@ -2,7 +2,6 @@
 import SectionWrapper from '@/components/SectionWrapper'
 import BlogCard from '@/components/BlogCard'
 import { fetchPostsList } from '@/lib/fetchers/posts'
-import Link from 'next/link'
 
 export const revalidate = 60
 

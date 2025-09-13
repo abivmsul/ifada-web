@@ -2,7 +2,36 @@
 import { sanityServerClient, urlFor } from '@/lib/sanity.server'
 import { PODCAST_LIST, PODCAST_BY_SLUG } from '@/lib/queries/podcasts'
 
-type Episode = {
+// Define proper types for Sanity image
+interface SanityImage {
+  _type: 'image';
+  asset: {
+    _ref: string;
+    _type: 'reference';
+  };
+  [key: string]: unknown;
+}
+
+// Define proper types for raw data from Sanity
+interface SanityPodcast {
+  _id: string;
+  title: string;
+  slug?: string;
+  episodeNumber?: number;
+  youtubeUrl?: string;
+  publishedAt?: string;
+  excerpt?: string;
+  coverImage?: SanityImage;
+  coverImageUrl?: string;
+  duration?: string;
+  tags?: string[];
+  featured?: boolean;
+  order?: number;
+  body?: unknown; // Portable text content
+  [key: string]: unknown;
+}
+
+export type Episode = {
   _id: string
   title: string
   slug?: string
@@ -16,7 +45,7 @@ type Episode = {
   tags?: string[]
   featured?: boolean
   order?: number
-  body?: any
+  body?: unknown // Portable text content
 }
 
 function formatDateLabel(date?: string | null) {
@@ -29,8 +58,8 @@ function formatDateLabel(date?: string | null) {
 }
 
 export async function fetchPodcastList(): Promise<Episode[]> {
-  const raw = await sanityServerClient.fetch(PODCAST_LIST)
-  return (raw || []).map((p: any) => {
+  const raw = await sanityServerClient.fetch<SanityPodcast[]>(PODCAST_LIST)
+  return (raw || []).map((p: SanityPodcast) => {
     const coverImageUrl = p.coverImageUrl || (p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : null)
     return {
       ...p,
@@ -41,7 +70,7 @@ export async function fetchPodcastList(): Promise<Episode[]> {
 }
 
 export async function fetchPodcastBySlug(slug: string): Promise<Episode | null> {
-  const p = await sanityServerClient.fetch(PODCAST_BY_SLUG, { slug })
+  const p = await sanityServerClient.fetch<SanityPodcast>(PODCAST_BY_SLUG, { slug })
   if (!p) return null
   const coverImageUrl = p.coverImageUrl || (p.coverImage ? urlFor(p.coverImage).width(1600).auto('format').url() : null)
   return { ...p, coverImageUrl, publishedLabel: formatDateLabel(p.publishedAt) } as Episode

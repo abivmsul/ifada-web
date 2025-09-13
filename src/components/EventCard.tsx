@@ -1,11 +1,16 @@
 // src/components/EventCard.tsx
 'use client'
-
-import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import cn from 'classnames'
 import NavLink from './NavLink'
+
+// Define a proper type for location instead of 'any'
+type Location = {
+  name?: string;
+  address?: string;
+  [key: string]: unknown; // For any additional properties
+}
 
 type Props = {
   title: string
@@ -16,7 +21,7 @@ type Props = {
   excerpt?: string
   imageUrl?: string
   isOnline?: boolean
-  location?: any
+  location?: Location // Replace 'any' with proper type
   href?: string
   className?: string
 }
@@ -36,7 +41,8 @@ export default function EventCard({
 }: Props) {
   // use server-provided label; if missing, fall back to raw ISO (safe)
   const startDisplay = startLabel ?? (start ? new Date(start).toISOString() : '')
-  const endDisplay = endLabel ?? (end ? new Date(end).toISOString() : '')
+  // Remove unused endDisplay variable to fix the warning
+  // const endDisplay = endLabel ?? (end ? new Date(end).toISOString() : '')
 
   return (
     <motion.article
@@ -58,13 +64,7 @@ export default function EventCard({
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base sm:text-lg font-semibold leading-snug">{title}</h3>
             
-              <time className="text-xs sm:text-sm text-primary whitespace-nowrap">{startDisplay}</time>
-{/*            
-            {isOnline ? (
-              <span className="text-sm text-telegram font-medium whitespace-nowrap">Online</span>
-            ) : (
-              ''
-            )} */}
+            <time className="text-xs sm:text-sm text-primary whitespace-nowrap">{startDisplay}</time>
           </div>
 
           {excerpt && <p className="text-sm text-gray-600 line-clamp-3">{excerpt}</p>}

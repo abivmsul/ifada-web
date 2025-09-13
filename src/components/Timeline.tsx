@@ -13,11 +13,10 @@ type Milestone = {
 }
 
 // Small SVG icons
-const BookIcon = ({ className = '' }: { className?: string }) => (
-  <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M20 6.5V17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+const OpenBookIcon = ({ className = '' }: { className?: string }) => (
+  <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V6H6.5A2.5 2.5 0 0 0 4 8.5V19.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M20 6V17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 )
 const SealIcon = ({ className = '' }: { className?: string }) => (
@@ -53,47 +52,70 @@ export default function Timeline({ items = [] as Milestone[] }: { items?: Milest
   const data: Milestone[] = items.length
     ? items
     : [
-        {
-          year: 'July 7, 2014',
-          title: 'Foundation of Faithful Traditions (Hadra)',
-          bullets: ["From Fuad Muna's 'Smile Gathering' (Telegram Live)", 'Spiritual circle for youth reflection'],
-          body: "Faithful Traditions Hadra was founded from Fuad Muna's Telegram Live 'Smile Gathering' — a spiritual group aimed at reviving spirituality among young people.",
-        },
-        {
-          year: '2014 — 2015',
-          title: 'Early Growth & Ifada Books',
-          bullets: ['Introduced Ifada books', 'Members asked for wider Hadra Network'],
-          body: 'The group gained momentum and members supported forming a wider network.',
-        },
-        {
-          year: 'May 4, 2016',
-          title: 'Legal Recognition',
-          highlight: true,
-          bullets: ['Approved by the Supreme Council of Islamic Affairs of Ethiopia', 'Allowed formal activities and finances'],
-          body: 'Ifada Community was approved as a legal entity, enabling formal programs and legal financial management.',
-        },
-        {
-          year: 'July 21, 2016',
-          title: 'Project Move 1 — Expansion',
-          bullets: ['Opened 11 new Hadra networks', 'Network grew from 10 to 21 branches'],
-          body: 'Project Move 1 added 11 new networks to widen the community reach and strengthen resources.',
-        },
-        {
-          year: 'November 3, 2016',
-          title: 'Establishment of the Hadra Network',
-          highlight: true,
-          bullets: ['Official formation of the Hadra Network', 'Structured weekly programs for youth'],
-          body: 'The Hadra Network of the Ifada Community was formally established as an organized spiritual community for youth.',
-        },
-        {
-          year: '2016 — Present',
-          title: 'Weekly Programs & Member Commitments',
-          bullets: ['Fridays 3:00 PM — 4:45 PM', 'Daily: ≥½ Juz and ≥50 Salawat', 'Active social responsibility campaigns'],
-          body: 'Weekly gatherings for Quranic reflection, hadith, seerah, with active community campaigns and daily member practices.',
-        },
+       {
+  year: 'July 14, 2022',
+  title: 'Foundation of Faithful Traditions (Hadra)',
+  bullets: [
+    "From Fuad Muna's 'Smile Gathering' (Telegram Live)",
+    'Established to revive spirituality and reflection'
+  ],
+  body: "The Faithful Traditions Hadra was founded from Fuad Muna's Telegram Live 'Smile Gathering' and aimed at reviving spirituality through collective reflection."
+},
+{
+  year: 'July 2022 — 2023',
+  title: 'Growth of Hadra Movement',
+  bullets: [
+    'Became a spiritual hub for youth',
+    'Ifada books introduced to the market',
+    'Vision of Hadra Network accepted by members'
+  ],
+  body: 'Hadra quickly grew into a spiritual hub for youth, with Ifada books reaching the market and members embracing the idea of a Hadra Network.'
+},
+{
+  year: 'November 13, 2023',
+  title: 'Establishment of the Ifada Community Hadra Chain',
+  highlight: true,
+  bullets: [
+    'Official formation of the Hadra chain',
+    'Built on Faithful Traditions Hadra',
+    'Structured spiritual community for youth'
+  ],
+  body: 'The Ifada Community Hadra Chain was officially established, creating a structured and organized framework for youth spirituality.'
+},
+{
+  year: 'July 28, 2024',
+  title: 'Expansion — Project Move 1',
+  bullets: [
+    'Opened 11 new Hadra networks',
+    'Expanded from 10 to 21 branches'
+  ],
+  body: 'Project Move 1 expanded the Hadra Network, strengthening youth connection to spirituality and improving organizational capacity.'
+},
+{
+  year: 'September 9, 2024',
+  title: 'Legal Recognition',
+  highlight: true,
+  bullets: [
+    'Approved by the Supreme Council of Islamic Affairs of Ethiopia',
+    'Enabled legal activities and financial processes'
+  ],
+  body: 'The Ifada Community Hadra Network received official legal recognition, empowering it to conduct activities and manage finances formally.'
+},
+{
+  year: '2023 — Present',
+  title: 'Weekly Programs & Member Duties',
+  bullets: [
+    'Fridays 3:00 PM — 4:45 PM: Quran, Hadith, Seerah, Family traditions',
+    'Daily: ≥1 Juz recitation',
+    'Daily: ≥100 Salawat',
+    'Active social responsibility campaigns'
+  ],
+  body: 'Weekly gatherings focus on Quranic reflection, Hadith perspectives, Seerah, and family traditions, while members maintain daily commitments and engage in community service.'
+}
+
       ]
 
-  const icons = [BookIcon, ProgramIcon, SealIcon, NetworkIcon, CalendarIcon, ProgramIcon]
+  const icons = [OpenBookIcon, ProgramIcon, SealIcon, NetworkIcon, CalendarIcon, ProgramIcon]
 
   const [active, setActive] = useState<Milestone | null>(null)
   const scrollRef = useRef<HTMLDivElement | null>(null)

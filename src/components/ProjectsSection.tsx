@@ -1,21 +1,29 @@
 'use client'
 import React from 'react'
-import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import type { ProjectItem } from '@/lib/fetchers/projects'
 import styles from './ProjectsSection.module.css'
 import NavLink from './NavLink'
 
-type Props = {
-  projects: ProjectItem[]
-  backgroundStaticPath?: string | null
-  alt?: string
+// Define proper types for the extended project properties
+interface ExtendedProjectItem extends ProjectItem {
+  startLabel?: string;
+  startDate?: string;
+  endLabel?: string;
+  endDate?: string;
+  status?: string;
 }
 
-function buildDateLabel(p: Partial<ProjectItem>) {
+type Props = {
+  projects: ExtendedProjectItem[]
+  backgroundStaticPath?: string | null
+}
+
+function buildDateLabel(p: ExtendedProjectItem) {
   // prefer already formatted labels (from server), otherwise try simple fallback
-  const start = (p as any).startLabel ?? (p as any).startDate ?? null
-  const end = (p as any).endLabel ?? (p as any).endDate ?? null
+  const start = p.startLabel ?? p.startDate ?? null
+  const end = p.endLabel ?? p.endDate ?? null
   if (start && end) {
     return `${start} — ${end}`
   }
@@ -25,12 +33,11 @@ function buildDateLabel(p: Partial<ProjectItem>) {
 export default function ProjectsSection({
   projects = [],
   backgroundStaticPath = '/images/background.jpg',
-  alt = 'Projects background decorative image',
 }: Props) {
   const displayed = (projects || []).slice(0, 3) // show up to 3
 
   const inlineStyle: React.CSSProperties | undefined = backgroundStaticPath
-    ? ({ ['--projects-bg' as any]: `url(${backgroundStaticPath})` } as React.CSSProperties)
+    ? { '--projects-bg': `url(${backgroundStaticPath})` } as React.CSSProperties
     : undefined
 
   return (
@@ -54,7 +61,7 @@ export default function ProjectsSection({
             {displayed.map((p, i) => {
               const dateLabel = buildDateLabel(p)
               const isFeatured = Boolean(p.featured)
-              const status = (p as any).status ?? null
+              const status = p.status ?? null
 
               return (
                 <motion.article
@@ -68,12 +75,16 @@ export default function ProjectsSection({
                   <NavLink href={p.slug ? `/projects/${p.slug}` : '#'} className={styles.cardLink} aria-label={`Open project ${p.title}`}>
                     <div className={styles.media}>
                       {p.coverImageUrl ? (
-                        <img
-                          src={p.coverImageUrl}
-                          alt={p.title ?? 'Project cover'}
-                          className={styles.mediaImg}
-                          loading="lazy"
-                        />
+                        // Replace img with Next.js Image component
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={p.coverImageUrl}
+                            alt={p.title ?? 'Project cover'}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                            className={styles.mediaImg}
+                          />
+                        </div>
                       ) : (
                         <div className={styles.mediaPlaceholder} aria-hidden />
                       )}

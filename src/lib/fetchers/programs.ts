@@ -2,12 +2,38 @@
 import { sanityServerClient, urlFor } from '@/lib/sanity.server'
 import { programsListQuery, programsCountQuery } from '@/lib/queries/programs'
 
+// Define proper types for Sanity image
+interface SanityImage {
+  _type: 'image';
+  asset: {
+    _ref: string;
+    _type: 'reference';
+  };
+  [key: string]: unknown;
+}
+
+// Define proper types for raw data from Sanity
+interface SanityProgram {
+  _id: string;
+  title: string;
+  slug?: {
+    current: string;
+    [key: string]: unknown;
+  };
+  excerpt?: string;
+  coverImage?: SanityImage;
+  featured?: boolean;
+  order?: number;
+  body?: unknown; // Portable text content
+  [key: string]: unknown;
+}
+
 export type ProgramDTO = {
   _id: string
   title: string
   slug?: string
   excerpt?: string
-  coverImage?: any
+  coverImage?: SanityImage
   coverImageUrl?: string | null
   featured?: boolean
   order?: number
@@ -30,7 +56,7 @@ export async function fetchProgramsServer({
 
   // build predicate; use parameterized search for safety
   let predicate = ''
-  const params: Record<string, any> = {}
+  const params: Record<string, string> = {}
 
   if (typeof featured === 'boolean') {
     predicate += ` && featured == ${featured ? 'true' : 'false'}`
@@ -47,25 +73,37 @@ export async function fetchProgramsServer({
   const countQuery = programsCountQuery(predicate)
 
   const [itemsRaw, total] = await Promise.all([
-    sanityServerClient.fetch(listQuery, params),
-    sanityServerClient.fetch(countQuery, params),
+    sanityServerClient.fetch<SanityProgram[]>(listQuery, params),
+    sanityServerClient.fetch<number>(countQuery, params),
   ])
 
-  const items = (itemsRaw || []).map((p: any) => ({
-    ...p,
+  const items = (itemsRaw || []).map((p: SanityProgram) => ({
+    _id: p._id,
+    title: p.title,
+    slug: p.slug?.current,
+    excerpt: p.excerpt,
+    coverImage: p.coverImage,
     coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : null,
+    featured: p.featured || false,
+    order: p.order || 0,
   }))
 
   return { items, total: Number(total || 0), page: pageNum, pageSize: size }
 }
 
 // reuse existing function to get single program by slug (kept minimal)
-export async function getProgramBySlug(slug: string) {
+export async function getProgramBySlug(slug: string): Promise<ProgramDTO | null> {
   const q = `*[_type == "program" && slug.current == $slug][0]{ _id, title, "slug": slug.current, excerpt, coverImage, body }`
-  const p = await sanityServerClient.fetch(q, { slug })
+  const p = await sanityServerClient.fetch<SanityProgram>(q, { slug })
   if (!p) return null
   return {
-    ...p,
+    _id: p._id,
+    title: p.title,
+    slug: p.slug?.current,
+    excerpt: p.excerpt,
+    coverImage: p.coverImage,
     coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1600).auto('format').url() : null,
+    featured: p.featured || false,
+    order: p.order || 0,
   }
 }

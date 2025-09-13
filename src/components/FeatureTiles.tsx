@@ -6,7 +6,6 @@ import {
   FaBookOpen,
   FaHandsHelping,
   FaComments,
-  FaHandHoldingMedical,
   FaPuzzlePiece,
   FaHeart,
   FaUsers,

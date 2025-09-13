@@ -3,9 +3,9 @@ import Hero from '@/components/Hero'
 import SectionWrapper from '@/components/SectionWrapper'
 import Timeline from '@/components/Timeline'
 import TeamGrid from '@/components/TeamGrid'
-import Link from 'next/link'
 import Button from '@/components/Button'
 import NavLink from '@/components/NavLink'
+import Image from 'next/image';
 
 export const metadata = {
   title: 'About — Ifada Islamic Foundation',
@@ -135,15 +135,15 @@ export default function AboutPage() {
       {/* Partners & CTA */}
       <SectionWrapper className="bg-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <h4 className="text-2xl font-semibold mb-4">Our Partners</h4>
-          <div className="flex flex-wrap justify-center items-center gap-8 mb-8">
-            <img src="/images/partner1.png" alt="partner 1" className="h-12 object-contain" />
-            <img src="/images/partner2.png" alt="partner 2" className="h-12 object-contain" />
-            <img src="/images/partner3.png" alt="partner 3" className="h-12 object-contain" />
+          <h4 className="text-2xl font-semibold mb-12">Our Partners</h4>
+          <div className="flex flex-wrap justify-center items-center gap-8 mb-12">
+            <Image src="/images/partner1.png" alt="partner 1" className="h-12 object-contain" width={300} height={300} />
+            <Image src="/images/partner1.png" alt="partner 2" className="h-12 object-contain" width={300} height={300} />
+            <Image src="/images/partner1.png" alt="partner 3" className="h-12 object-contain" width={300} height={300} />
           </div>
 
           <div className="max-w-3xl mx-auto">
-            <h4 className="text-xl font-semibold mb-2">Join us in our mission</h4>
+            <h4 className="text-xl font-semibold mb-4">Join us in our mission</h4>
             <p className="text-gray-600 mb-4">Volunteer, donate, or partner with Ifada to support Projects and events.</p>
             <div className="flex justify-center gap-4">
               <NavLink href="/contact"><Button>Contact</Button></NavLink>

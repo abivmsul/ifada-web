@@ -1,10 +1,17 @@
 // src/components/EventsListClient.tsx
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import debounce from 'just-debounce-it'
 import EventCard from './EventCard'
 import cn from 'classnames'
+
+// Define a proper type for location instead of 'any'
+type Location = {
+  name?: string;
+  address?: string;
+  [key: string]: unknown;
+}
 
 type EventDTO = {
   _id: string
@@ -14,7 +21,7 @@ type EventDTO = {
   end?: string | null
   startLabel?: string | null
   endLabel?: string | null
-  location?: any
+  location?: Location // Replace 'any' with proper type
   isOnline?: boolean
   excerpt?: string
   coverImageUrl?: string | null
@@ -38,9 +45,11 @@ export default function EventsListClient({ initialData }: { initialData: ApiResu
   const [filterTab, setFilterTab] = useState<'upcoming' | 'ongoing' | 'past'>('upcoming')
   const [loading, setLoading] = useState(false)
 
-  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  // Remove unused totalPages variable to fix warning
+  // const totalPages = Math.max(1, Math.ceil(total / pageSize))
 
-  const fetchPage = async (p: number, s: string, featured?: boolean | undefined, filter?: string) => {
+  // Wrap fetchPage in useCallback to stabilize the function reference
+  const fetchPage = useCallback(async (p: number, s: string, featured?: boolean | undefined, filter?: string) => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -62,30 +71,34 @@ export default function EventsListClient({ initialData }: { initialData: ApiResu
     } finally {
       setLoading(false)
     }
-  }
+  }, [pageSize])
 
+  // Add fetchPage to the dependency array
   const debouncedFetch = useMemo(
     () =>
       debounce((p: number, q: string, f?: boolean | undefined, filter?: string) => {
         void fetchPage(p, q, f, filter)
       }, 300),
-    [pageSize],
+    [pageSize, fetchPage], // Add fetchPage dependency
   )
 
+  // Add all missing dependencies
   useEffect(() => {
     // when tab changes, load page 1 of that tab
     void fetchPage(1, search, featuredOnly, filterTab)
-  }, [filterTab, pageSize])
+  }, [filterTab, pageSize, fetchPage, search, featuredOnly]) // Add missing dependencies
 
+  // Add all missing dependencies
   useEffect(() => {
     // page change
     void fetchPage(page, search, featuredOnly, filterTab)
-  }, [page])
+  }, [page, fetchPage, search, featuredOnly, filterTab]) // Add missing dependencies
 
+  // Add all missing dependencies
   useEffect(() => {
     setPage(1)
     debouncedFetch(1, search, featuredOnly, filterTab)
-  }, [search, featuredOnly])
+  }, [search, featuredOnly, debouncedFetch, filterTab]) // Add missing dependencies
 
   const pagesToShow = useMemo(() => {
     const pages: (number | '...')[] = []

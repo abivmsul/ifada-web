@@ -1,7 +1,7 @@
 // src/components/ProgramsListClient.tsx
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import Card from './Card'
 import cn from 'classnames'
 import debounce from 'just-debounce-it' // small debounce lib, or implement inline
@@ -32,8 +32,8 @@ export default function ProgramsListClient({ initialData }: { initialData: ApiRe
   const [loading, setLoading] = useState(false)
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
 
-  // build fetch function
-  const fetchPage = async (p: number, s: string, featured?: boolean | undefined) => {
+  // build fetch function - wrap in useCallback to stabilize the function reference
+  const fetchPage = useCallback(async (p: number, s: string, featured?: boolean | undefined) => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -54,35 +54,35 @@ export default function ProgramsListClient({ initialData }: { initialData: ApiRe
     } finally {
       setLoading(false)
     }
-  }
+  }, [pageSize]) // Add pageSize as dependency
 
   // debounce search to avoid too many requests
-  // you can replace with any debounce you prefer
+  // add fetchPage to the dependency array
   const debouncedFetch = useMemo(
     () =>
       debounce((p: number, q: string, f?: boolean | undefined) => {
         void fetchPage(p, q, f)
       }, 350),
-    [pageSize],
+    [pageSize, fetchPage], // Add fetchPage dependency
   )
 
   // initial effect: ensure page and data are in sync (no-op if initial already)
   useEffect(() => {
     // when pageSize changes, reset to page 1 and reload
     void fetchPage(1, search, featuredOnly)
-  }, [pageSize])
+  }, [pageSize, fetchPage, search, featuredOnly]) // Add all missing dependencies
 
   // when user changes page
   useEffect(() => {
     // load current page with current filters
     void fetchPage(page, search, featuredOnly)
-  }, [page])
+  }, [page, fetchPage, search, featuredOnly]) // Add all missing dependencies
 
   // when search or featured toggles change, reset to page 1 and fetch (debounced)
   useEffect(() => {
     setPage(1)
     debouncedFetch(1, search, featuredOnly)
-  }, [search, featuredOnly])
+  }, [search, featuredOnly, debouncedFetch]) // Add debouncedFetch dependency
 
   // simple page numbers to render (show up to 7 pages with ellipsis)
   const pagesToShow = useMemo(() => {
@@ -113,7 +113,7 @@ export default function ProgramsListClient({ initialData }: { initialData: ApiRe
           <input
             id="programSearch"
             className="border rounded px-3 py-2 w-[220px]"
-            placeholder="Search programs..."
+            placeholder="Search Hadrels..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
