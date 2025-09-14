@@ -82,15 +82,15 @@ export default async function HomePage() {
     { id: 's2', label: 'Leaders who inspire communities (Amirs)', value: 80 },
     { id: 's3', label: 'Hadras', value: 50 },
   ]
-  const amirs = '/images/ifada-amirs.jpg'
+  // const amirs = '/images/ifada-amirs.jpg'
   return (
     <>
       <HeroParallax
         title="Connecting youth with spirituality and fulfilling social responsibility"
         subtitle="رَبِّي فَاجْعَلْ مُجْتَمَعَنَا غَايَةُ حُسْنِ الْخِتَامِ"
-        ctaText="Explore Projects"
-        ctaLink="/projects"
-        imageUrl={amirs}
+        ctaText="Explore More"
+        ctaLink="/about"
+        // imageUrl={amirs}
         watermarkSide="left"
       />
 

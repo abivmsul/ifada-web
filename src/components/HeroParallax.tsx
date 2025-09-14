@@ -24,7 +24,7 @@ type Props = {
 export default function HeroParallax({
   title,
   subtitle,
-  imageUrl,
+  // imageUrl,
   ctaText,
   ctaLink,
   watermarkSide = 'left',
@@ -35,7 +35,7 @@ export default function HeroParallax({
   const contentY = useTransform(scrollY, [0, 500], [0, -18])
 
   const overlay = Math.max(0, Math.min(1, overlayStrength))
-
+  const amirs = '/images/ifada-amirs.jpg'
   return (
     <header className="relative h-[72vh] md:h-[82vh] overflow-hidden flex items-center justify-center text-center">
       {/* background + overlays */}
@@ -44,9 +44,9 @@ export default function HeroParallax({
         className="absolute inset-0 z-0"
         aria-hidden
       >
-        {imageUrl ? (
+        {amirs ? (
           <Image
-            src={imageUrl}
+            src={amirs}
             alt={title}
             fill
             sizes="100vw"
