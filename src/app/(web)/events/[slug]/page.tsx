@@ -1,5 +1,6 @@
-// src/app/events/[slug]/page.tsx
-import { getEventBySlug } from '@/lib/fetchers/events'
+
+// File: src/app/(web)/events/[slug]/page.tsx
+import { getEventBySlug, MappedEvent } from '@/lib/fetchers/events'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import SectionWrapper from '@/components/SectionWrapper'
@@ -23,8 +24,11 @@ export default async function EventDetail(props: unknown) {
   const event = await getEventBySlug(slug)
   if (!event) return notFound()
 
-  const startLabel = event.start ? new Date(event.start).toLocaleString() : ''
-  const endLabel = event.end ? new Date(event.end).toLocaleString() : ''
+  const startLabel = event.start ? new Date(event.start as string).toLocaleString() : ''
+  const endLabel = event.end ? new Date(event.end as string).toLocaleString() : ''
+
+  // helper to ensure href receives string | undefined (not null)
+  const safeHref = (u: string | null | undefined) => u ?? undefined
 
   return (
     <main>
@@ -32,14 +36,14 @@ export default async function EventDetail(props: unknown) {
         <div className="max-w-4xl mx-auto px-4">
           {event.coverImageUrl && (
             <div className="relative h-64 md:h-96 mb-6 rounded-lg overflow-hidden">
-              <Image src={event.coverImageUrl} alt={event.title} fill style={{ objectFit: 'cover' }} />
+              <Image src={event.coverImageUrl as string} alt={event.title as string} fill style={{ objectFit: 'cover' }} />
             </div>
           )}
 
           <h1 className="text-3xl font-bold mb-2">{event.title}</h1>
           <div className="text-sm text-secondary mb-2">
             {event.isOnline ? (
-              <a href={event.registrationUrl} target="_blank" rel="noreferrer">
+              <a href={safeHref(event.registrationUrl as string | null | undefined)} target="_blank" rel="noreferrer">
                 Online event
               </a>
             ) : (
@@ -52,6 +56,7 @@ export default async function EventDetail(props: unknown) {
 
           {event.excerpt && <p className="text-gray-700 mb-6">{event.excerpt}</p>}
 
+          {/* Render PortableText only when body exists and is typed */}
           {event.body && (
             <div className="prose max-w-none">
               <PortableTextRenderer value={event.body} />
@@ -62,7 +67,7 @@ export default async function EventDetail(props: unknown) {
           <div className="mt-8">
             {event.registrationUrl ? (
               <a
-                href={event.registrationUrl}
+                href={safeHref(event.registrationUrl as string | null | undefined)}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-block bg-secondary text-white px-4 py-2 rounded"

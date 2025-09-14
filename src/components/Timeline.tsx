@@ -54,12 +54,12 @@ export default function Timeline({ items = [] as Milestone[] }: { items?: Milest
     : [
        {
   year: 'July 14, 2022',
-  title: 'Foundation of Faithful Traditions (Hadra)',
+  title: 'Foundation of Ifada Islamic Organization (Hadra)',
   bullets: [
-    "From Fuad Muna's 'Smile Gathering' (Telegram Live)",
+    "From Fuad Muna's 'Smile Gathering / ፈገግታ መጅሊስ' (Telegram Live)",
     'Established to revive spirituality and reflection'
   ],
-  body: "The Faithful Traditions Hadra was founded from Fuad Muna's Telegram Live 'Smile Gathering' and aimed at reviving spirituality through collective reflection."
+  body: "The Ifada Islamic Organization was founded from Fuad Muna's Telegram Live 'Smile Gathering' and aimed at reviving spirituality through collective reflection."
 },
 {
   year: 'July 2022 — 2023',
@@ -67,9 +67,9 @@ export default function Timeline({ items = [] as Milestone[] }: { items?: Milest
   bullets: [
     'Became a spiritual hub for youth',
     'Ifada books introduced to the market',
-    'Vision of Hadra Network accepted by members'
+    'Vision of Hadra Chain accepted by members'
   ],
-  body: 'Hadra quickly grew into a spiritual hub for youth, with Ifada books reaching the market and members embracing the idea of a Hadra Network.'
+  body: 'Hadra quickly grew into a spiritual hub for youth, with Ifada books reaching the market and members embracing the idea of a Hadra Chain.'
 },
 {
   year: 'November 13, 2023',
@@ -86,10 +86,10 @@ export default function Timeline({ items = [] as Milestone[] }: { items?: Milest
   year: 'July 28, 2024',
   title: 'Expansion — Project Move 1',
   bullets: [
-    'Opened 11 new Hadra networks',
+    'Opened 11 new Hadra Chains',
     'Expanded from 10 to 21 branches'
   ],
-  body: 'Project Move 1 expanded the Hadra Network, strengthening youth connection to spirituality and improving organizational capacity.'
+  body: 'Project Move 1 expanded the Hadra Chain, strengthening youth connection to spirituality and improving organizational capacity.'
 },
 {
   year: 'September 9, 2024',
@@ -99,7 +99,7 @@ export default function Timeline({ items = [] as Milestone[] }: { items?: Milest
     'Approved by the Supreme Council of Islamic Affairs of Ethiopia',
     'Enabled legal activities and financial processes'
   ],
-  body: 'The Ifada Community Hadra Network received official legal recognition, empowering it to conduct activities and manage finances formally.'
+  body: 'The Ifada Community Hadra Chain received official legal recognition, empowering it to conduct activities and manage finances formally.'
 },
 {
   year: '2023 — Present',

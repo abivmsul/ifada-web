@@ -1,36 +1,3 @@
-// // ifada-cms/schemaTypes/event.ts
-// import { defineType, defineField } from 'sanity'
-
-// export const event = defineType({
-//   name: 'event',
-//   title: 'Event',
-//   type: 'document',
-//   fields: [
-//     defineField({ name: 'title', title: 'Title', type: 'string', validation: (Rule) => Rule.required() }),
-//     defineField({ name: 'slug', title: 'Slug', type: 'slug', options: { source: 'title' } }),
-//     defineField({ name: 'start', title: 'Start Date & Time', type: 'datetime', validation: (Rule) => Rule.required() }),
-//     defineField({ name: 'end', title: 'End Date & Time', type: 'datetime' }),
-//     defineField({ name: 'isOnline', title: 'Is Online', type: 'boolean' }),
-//     defineField({ name: 'location', title: 'Location', type: 'object', fields: [
-//       { name: 'name', title: 'Name', type: 'string' },
-//       { name: 'address', title: 'Address', type: 'string' },
-//       { name: 'map', title: 'Map (geoPoint)', type: 'geopoint' },
-//     ]}),
-//     defineField({ name: 'coverImage', title: 'Cover Image', type: 'image', options: { hotspot: true } }),
-//     defineField({ name: 'excerpt', title: 'Excerpt', type: 'text' }),
-//     defineField({ name: 'body', title: 'Details', type: 'array', of: [{ type: 'block' }] }),
-//     defineField({ name: 'registrationUrl', title: 'Registration URL', type: 'url' }),
-//     defineField({ name: 'registrationForm', title: 'Registration Form Fields (optional)', type: 'array', of: [{ type: 'object', fields: [
-//       { name: 'label', title: 'Label', type: 'string' },
-//       { name: 'fieldType', title: 'Field Type', type: 'string', options: { list: ['text','email','tel','select','checkbox'] } },
-//       { name: 'required', title: 'Required', type: 'boolean' },
-//     ] }] }),
-//     defineField({ name: 'order', title: 'Order', type: 'number', initialValue: 0 }),
-//   ],
-//   preview: { select: { title: 'title', subtitle: 'start', media: 'coverImage' } },
-// })
-
-
 // ifada-cms/schemaTypes/event.ts
 import { defineType, defineField } from 'sanity'
 
@@ -68,10 +35,12 @@ export const event = defineType({
       description: 'Optional end date/time. If provided it must be after Start.',
       validation: (Rule) =>
         Rule.custom((end, context) => {
-          const start = context.parent?.start
+          // Narrow the context.parent type so TypeScript knows `.start` exists
+          const parent = context.parent as { start?: string | Date } | undefined
+          const start = parent?.start
           if (end && start) {
-            const s = new Date(start)
-            const e = new Date(end)
+            const s = new Date(start as string)
+            const e = new Date(end as string)
             if (e < s) return 'End date/time must be after Start date/time'
           }
           return true
@@ -90,10 +59,15 @@ export const event = defineType({
       title: 'Online URL (Zoom / YouTube / Stream)',
       type: 'url',
       description: 'Provide link if the event is online. Leave empty for physical events.',
-      hidden: ({ parent }) => !parent?.isOnline,
+      hidden: ({ parent }) => {
+        // parent may be {} by the compiler — narrow it for safety
+        const p = parent as { isOnline?: boolean } | undefined
+        return !p?.isOnline
+      },
       validation: (Rule) =>
         Rule.custom((url, context) => {
-          if (context.parent?.isOnline && !url) return 'Online events should have an Online URL'
+          const parent = context.parent as { isOnline?: boolean } | undefined
+          if (parent?.isOnline && !url) return 'Online events should have an Online URL'
           return true
         }),
     }),
@@ -107,7 +81,10 @@ export const event = defineType({
         defineField({ name: 'address', title: 'Address', type: 'string' }),
         defineField({ name: 'map', title: 'Map (geopoint)', type: 'geopoint' }),
       ],
-      hidden: ({ parent }) => parent?.isOnline === true,
+      hidden: ({ parent }) => {
+        const p = parent as { isOnline?: boolean } | undefined
+        return p?.isOnline === true
+      },
     }),
 
     defineField({
@@ -132,7 +109,6 @@ export const event = defineType({
       of: [
         { type: 'block' },
         { type: 'image', options: { hotspot: true } },
-        // add other portable text related objects if needed
       ],
     }),
 
@@ -189,7 +165,10 @@ export const event = defineType({
               title: 'Options (for select)',
               type: 'array',
               of: [{ type: 'string' }],
-              hidden: ({ parent }) => parent?.fieldType !== 'select',
+              hidden: ({ parent }) => {
+                const p = parent as { fieldType?: string } | undefined
+                return p?.fieldType !== 'select'
+              },
             }),
           ],
         },
