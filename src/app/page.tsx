@@ -72,6 +72,7 @@ import { fetchFeaturedProjects } from '@/lib/fetchers/projects'
 import { fetchFeaturedEvents } from '@/lib/fetchers/events'
 export const revalidate = 60
 
+const amirs = "/images/ifada-amirs.jpg"
 export default async function HomePage() {
   const projects = await fetchFeaturedProjects(3)
   const events = await fetchFeaturedEvents(3)
@@ -82,7 +83,6 @@ export default async function HomePage() {
     { id: 's2', label: 'Leaders who inspire communities (Amirs)', value: 80 },
     { id: 's3', label: 'Hadras', value: 50 },
   ]
-  // const amirs = '/images/ifada-amirs.jpg'
   return (
     <>
       <HeroParallax
@@ -90,7 +90,7 @@ export default async function HomePage() {
         subtitle="رَبِّي فَاجْعَلْ مُجْتَمَعَنَا غَايَةُ حُسْنِ الْخِتَامِ"
         ctaText="Explore More"
         ctaLink="/about"
-        // imageUrl={amirs}
+        imageUrl={amirs}
         watermarkSide="left"
       />
 
