@@ -1,19 +1,26 @@
 import React from 'react'
 import { PortableText, PortableTextComponents, PortableTextComponentProps } from '@portabletext/react'
-import type { PortableTextBlock, PortableTextMarkDefinition, PortableTextSpan } from '@portabletext/types'
+import type { PortableTextBlock } from '@portabletext/types'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity.server'
 
 /** ---- Typed local props for non-block types ---- */
-interface MarkProps extends React.PropsWithChildren<{}> {
+interface MarkProps {
+  children?: React.ReactNode
   value?: { href?: string }
 }
 
+// Define the image type according to Sanity's structure
 interface ImageTypeValue {
-  asset?: { _ref?: string; _type?: 'reference' }
+  _type: 'image'
+  asset: {
+    _ref: string
+    _type: 'reference'
+  }
   alt?: string
   caption?: string
 }
+
 interface ImageTypeProps {
   value: ImageTypeValue
 }
@@ -71,7 +78,8 @@ const components: PortableTextComponents = {
   },
   types: {
     image: ({ value }: ImageTypeProps) => {
-      const src = value?.asset ? urlFor(value).width(1600).auto('format').url() : null
+      // Use a type assertion to ensure compatibility with urlFor
+      const src = value ? urlFor(value as unknown as Parameters<typeof urlFor>[0]).width(1600).auto('format').url() : null
       const alt = value?.alt || value?.caption || 'image'
       if (!src) return null
       return (
