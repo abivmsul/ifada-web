@@ -72,7 +72,7 @@ import { fetchFeaturedProjects } from '@/lib/fetchers/projects'
 import { fetchFeaturedEvents } from '@/lib/fetchers/events'
 export const revalidate = 60
 
-const amirs = "/images/ifada-amirs.jpg"
+const amirs = "/images/Ifada-amirs.jpg"
 export default async function HomePage() {
   const projects = await fetchFeaturedProjects(3)
   const events = await fetchFeaturedEvents(3)
