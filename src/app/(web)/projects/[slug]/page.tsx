@@ -7,8 +7,20 @@ import PortableTextRenderer from '@/components/PortableTextRenderer'
 
 export const revalidate = 60
 
-export default async function ProjectDetail({ params }: { params: { slug: string } }) {
-  const project = await getProjectBySlug(params.slug)
+// Local props shape used after awaiting/casting
+interface Props {
+  params: {
+    slug: string
+  }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export default async function ProjectDetail(props: unknown) {
+  // await props (Next may provide promise-like params) and cast to our Props shape
+  const { params } = (await props) as Props
+  const { slug } = params
+
+  const project = await getProjectBySlug(slug)
   if (!project) return notFound()
 
   return (
@@ -20,10 +32,21 @@ export default async function ProjectDetail({ params }: { params: { slug: string
               <Image src={project.coverImageUrl} alt={project.title} fill style={{ objectFit: 'cover' }} />
             </div>
           )}
+
           <h1 className="text-3xl text-primary font-bold mb-2">{project.title}</h1>
-          <div className="text-sm text-secondary mb-4">{project.status ? project.status.toUpperCase() : ''} {project.startLabel ? ' • ' + project.startLabel : ''}</div>
+
+          <div className="text-sm text-secondary mb-4">
+            {project.status ? project.status.toUpperCase() : ''}
+            {project.startLabel ? ` • ${project.startLabel}` : ''}
+          </div>
+
           {project.excerpt && <p className="text-gray-900 mb-6">{project.excerpt}</p>}
-          {project.body && <div className="prose max-w-none"><PortableTextRenderer value={project.body} /></div>}
+
+          {project.body && (
+            <div className="prose max-w-none">
+              <PortableTextRenderer value={project.body} />
+            </div>
+          )}
         </div>
       </SectionWrapper>
     </main>
