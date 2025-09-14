@@ -1,6 +1,7 @@
 
 // File: src/app/(web)/events/[slug]/page.tsx
 import { getEventBySlug, MappedEvent } from '@/lib/fetchers/events'
+import type { PortableTextBlock } from '@portabletext/types'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import SectionWrapper from '@/components/SectionWrapper'
@@ -30,6 +31,9 @@ export default async function EventDetail(props: unknown) {
   // helper to ensure href receives string | undefined (not null)
   const safeHref = (u: string | null | undefined) => u ?? undefined
 
+  // Narrow body to the official PortableTextBlock[] type for the renderer
+  const body = event.body as PortableTextBlock[] | undefined
+
   return (
     <main>
       <SectionWrapper id="event-detail" className="py-10">
@@ -57,9 +61,9 @@ export default async function EventDetail(props: unknown) {
           {event.excerpt && <p className="text-gray-700 mb-6">{event.excerpt}</p>}
 
           {/* Render PortableText only when body exists and is typed */}
-          {event.body && (
+          {body && (
             <div className="prose max-w-none">
-              <PortableTextRenderer value={event.body} />
+              <PortableTextRenderer value={body} />
             </div>
           )}
 

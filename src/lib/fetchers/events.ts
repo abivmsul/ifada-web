@@ -1,9 +1,8 @@
-// File: src/lib/fetchers/events.ts
+// src/lib/fetchers/events.ts
 import { sanityServerClient, urlFor } from '@/lib/sanity.server'
 import { eventsListQuery, eventsCountQuery, EVENT_BY_SLUG, EVENTS_FEATURED, EVENTS_LIST } from '@/lib/queries/events'
+import type { PortableTextBlock } from '@portabletext/types'
 
-// Minimal portable-text block shape — replace with '@portabletext/types' for stricter typing
-export type PortableTextBlock = { _type?: string; [key: string]: any }
 export type PortableText = PortableTextBlock[]
 
 // Define proper type for Sanity image
@@ -16,7 +15,7 @@ interface SanityImage {
   [key: string]: unknown
 }
 
-// Define proper types for events as fetched from Sanity
+// Sanity's raw event shape
 interface SanityEvent {
   _id: string
   title: string
@@ -45,17 +44,17 @@ interface SanityEvent {
   [key: string]: unknown
 }
 
-// Exported mapped shape used throughout the app — includes typed `body`
+// Exported mapped shape used throughout the app — uses `undefined` for optional/missing values
 export type MappedEvent = {
   _id: string
   title: string
   slug?: string
-  start?: string | null
-  end?: string | null
-  startLabel?: string | null
-  endLabel?: string | null
-  coverImageUrl?: string | null
-  excerpt?: string | null
+  start?: string // string | undefined
+  end?: string
+  startLabel?: string
+  endLabel?: string
+  coverImageUrl?: string
+  excerpt?: string
   featured?: boolean
   location?: {
     name?: string
@@ -63,14 +62,14 @@ export type MappedEvent = {
     [key: string]: unknown
   }
   isOnline?: boolean
-  registrationUrl?: string | null
-  order?: number | null
+  registrationUrl?: string
+  order?: number
   speakers?: Array<{
     _id: string
     name: string
     role?: string
   }>
-  // Stronger typed body (portable text)
+  // Strongly typed Portable Text body (optional)
   body?: PortableText
 }
 
@@ -79,15 +78,15 @@ function mapImageAndLabels(p: SanityEvent): MappedEvent {
     _id: p._id,
     title: p.title,
     slug: p.slug,
-    start: p.start || null,
-    end: p.end || null,
-    excerpt: p.excerpt || null,
-    featured: p.featured || false,
+    start: p.start || undefined,
+    end: p.end || undefined,
+    excerpt: p.excerpt || undefined,
+    featured: p.featured ?? false,
     location: p.location,
-    isOnline: p.isOnline || false,
-    registrationUrl: p.registrationUrl || null,
-    order: p.order || null,
-    coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : null,
+    isOnline: p.isOnline ?? false,
+    registrationUrl: p.registrationUrl || undefined,
+    order: p.order ?? undefined,
+    coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : undefined,
     body: p.body || undefined,
   }
 
@@ -107,7 +106,7 @@ function mapImageAndLabels(p: SanityEvent): MappedEvent {
       mapped.startLabel = mapped.start
     }
   } else {
-    mapped.startLabel = null
+    mapped.startLabel = undefined
   }
 
   if (mapped.end) {
@@ -117,7 +116,7 @@ function mapImageAndLabels(p: SanityEvent): MappedEvent {
       mapped.endLabel = mapped.end
     }
   } else {
-    mapped.endLabel = null
+    mapped.endLabel = undefined
   }
 
   return mapped
@@ -169,21 +168,21 @@ export async function fetchEventsServer({
 export async function getEventBySlug(slug: string): Promise<MappedEvent | null> {
   const p = await sanityServerClient.fetch<SanityEvent>(EVENT_BY_SLUG, { slug })
   if (!p) return null
-  
+
   const mapped: MappedEvent = {
     _id: p._id,
     title: p.title,
     slug: p.slug,
-    coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1600).auto('format').url() : null,
-    start: p.start || null,
-    end: p.end || null,
-    excerpt: p.excerpt || null,
-    featured: p.featured || false,
-    registrationUrl: p.registrationUrl || null,
-    order: p.order || null,
+    coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1600).auto('format').url() : undefined,
+    start: p.start || undefined,
+    end: p.end || undefined,
+    excerpt: p.excerpt || undefined,
+    featured: p.featured ?? false,
+    registrationUrl: p.registrationUrl || undefined,
+    order: p.order ?? undefined,
     body: p.body || undefined,
     location: p.location,
-    isOnline: p.isOnline || false,
+    isOnline: p.isOnline ?? false,
     speakers: p.speakers ? p.speakers.map(s => ({ _id: s._id, name: s.name, role: s.role })) : undefined,
   }
 
@@ -195,9 +194,9 @@ export async function getEventBySlug(slug: string): Promise<MappedEvent | null> 
     hour: 'numeric',
     minute: '2-digit',
   })
-  
-  mapped.startLabel = mapped.start ? formatter.format(new Date(mapped.start)) : null
-  mapped.endLabel = mapped.end ? formatter.format(new Date(mapped.end)) : null
+
+  mapped.startLabel = mapped.start ? formatter.format(new Date(mapped.start)) : undefined
+  mapped.endLabel = mapped.end ? formatter.format(new Date(mapped.end)) : undefined
 
   return mapped
 }
@@ -213,22 +212,22 @@ export async function fetchFeaturedEvents(limit = 3): Promise<EventItem[]> {
     }
 
     const mapped = (raw || []).map((e: SanityEvent) => {
-      const imageUrl = e.coverImage ? urlFor(e.coverImage).width(1400).auto('format').url() : null
+      const imageUrl = e.coverImage ? urlFor(e.coverImage).width(1400).auto('format').url() : undefined
 
       return {
         _id: e._id,
         title: e.title,
         slug: e.slug,
-        start: e.start || null,
-        end: e.end || null,
-        location: e.location || null,
-        isOnline: e.isOnline || false,
-        registrationUrl: e.registrationUrl || null,
-        excerpt: e.excerpt || null,
-        coverImage: e.coverImage || null,
+        start: e.start || undefined,
+        end: e.end || undefined,
+        location: e.location || undefined,
+        isOnline: e.isOnline ?? false,
+        registrationUrl: e.registrationUrl || undefined,
+        excerpt: e.excerpt || undefined,
+        coverImage: e.coverImage || undefined,
         imageUrl,
-        featured: e.featured || false,
-        order: e.order || null,
+        featured: e.featured ?? false,
+        order: e.order ?? undefined,
       } as EventItem
     })
 
@@ -243,49 +242,48 @@ export type EventItem = {
   _id: string
   title: string
   slug?: string
-  start?: string | null
-  end?: string | null
+  start?: string
+  end?: string
   location?: {
     name?: string
     address?: string
     [key: string]: unknown
-  } | null
+  } | undefined
   isOnline?: boolean
-  registrationUrl?: string | null
-  excerpt?: string | null
-  coverImage?: SanityImage | null
-  imageUrl?: string | null
+  registrationUrl?: string
+  excerpt?: string
+  coverImage?: SanityImage | undefined
+  imageUrl?: string
   featured?: boolean
-  order?: number | null
+  order?: number
 }
 
 export async function fetchEventsList(): Promise<EventItem[]> {
   try {
     const raw = await sanityServerClient.fetch<SanityEvent[]>(EVENTS_LIST)
     const mapped = (raw || []).map((e: SanityEvent) => {
-      const imageUrl = e.coverImage ? urlFor(e.coverImage).width(1400).auto('format').url() : null
-      
+      const imageUrl = e.coverImage ? urlFor(e.coverImage).width(1400).auto('format').url() : undefined
+
       return {
         _id: e._id,
         title: e.title,
         slug: e.slug,
-        start: e.start || null,
-        end: e.end || null,
-        location: e.location || null,
-        isOnline: e.isOnline || false,
-        registrationUrl: e.registrationUrl || null,
-        excerpt: e.excerpt || null,
-        coverImage: e.coverImage || null,
+        start: e.start || undefined,
+        end: e.end || undefined,
+        location: e.location || undefined,
+        isOnline: e.isOnline ?? false,
+        registrationUrl: e.registrationUrl || undefined,
+        excerpt: e.excerpt || undefined,
+        coverImage: e.coverImage || undefined,
         imageUrl,
-        featured: e.featured || false,
-        order: e.order || null,
+        featured: e.featured ?? false,
+        order: e.order ?? undefined,
       } as EventItem
     })
-    
+
     return mapped
   } catch (err) {
     console.error('fetchEventsList error', err)
     return []
   }
 }
-

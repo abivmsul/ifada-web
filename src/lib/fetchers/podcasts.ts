@@ -1,36 +1,39 @@
 // src/lib/fetchers/podcasts.ts
 import { sanityServerClient, urlFor } from '@/lib/sanity.server'
 import { PODCAST_LIST, PODCAST_BY_SLUG } from '@/lib/queries/podcasts'
+import type { PortableTextBlock } from '@portabletext/types'
 
-// Define proper types for Sanity image
+export type PortableText = PortableTextBlock[]
+
+/** Sanity raw shapes */
 interface SanityImage {
-  _type: 'image';
+  _type: 'image'
   asset: {
-    _ref: string;
-    _type: 'reference';
-  };
-  [key: string]: unknown;
+    _ref: string
+    _type: 'reference'
+  }
+  [key: string]: unknown
 }
 
-// Define proper types for raw data from Sanity
 interface SanityPodcast {
-  _id: string;
-  title: string;
-  slug?: string;
-  episodeNumber?: number;
-  youtubeUrl?: string;
-  publishedAt?: string;
-  excerpt?: string;
-  coverImage?: SanityImage;
-  coverImageUrl?: string;
-  duration?: string;
-  tags?: string[];
-  featured?: boolean;
-  order?: number;
-  body?: unknown; // Portable text content
-  [key: string]: unknown;
+  _id: string
+  title: string
+  slug?: string
+  episodeNumber?: number
+  youtubeUrl?: string
+  publishedAt?: string
+  excerpt?: string
+  coverImage?: SanityImage
+  coverImageUrl?: string
+  duration?: string
+  tags?: string[]
+  featured?: boolean
+  order?: number
+  body?: PortableText
+  [key: string]: unknown
 }
 
+/** Mapped/consumed shape used in the app */
 export type Episode = {
   _id: string
   title: string
@@ -38,18 +41,20 @@ export type Episode = {
   episodeNumber?: number
   youtubeUrl?: string
   publishedAt?: string
-  publishedLabel?: string | null
+  // normalized — undefined when missing
+  publishedLabel?: string
   excerpt?: string
-  coverImageUrl?: string | null
+  // normalized — undefined when missing
+  coverImageUrl?: string
   duration?: string
   tags?: string[]
   featured?: boolean
   order?: number
-  body?: unknown // Portable text content
+  body?: PortableText
 }
 
-function formatDateLabel(date?: string | null) {
-  if (!date) return null
+function formatDateLabel(date?: string | undefined): string | undefined {
+  if (!date) return undefined
   try {
     return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(date))
   } catch {
@@ -60,11 +65,25 @@ function formatDateLabel(date?: string | null) {
 export async function fetchPodcastList(): Promise<Episode[]> {
   const raw = await sanityServerClient.fetch<SanityPodcast[]>(PODCAST_LIST)
   return (raw || []).map((p: SanityPodcast) => {
-    const coverImageUrl = p.coverImageUrl || (p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : null)
+    const coverImageUrl =
+      p.coverImageUrl ??
+      (p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : undefined)
+
     return {
-      ...p,
+      _id: p._id,
+      title: p.title,
+      slug: p.slug,
+      episodeNumber: p.episodeNumber,
+      youtubeUrl: p.youtubeUrl,
+      publishedAt: p.publishedAt,
+      publishedLabel: formatDateLabel(p.publishedAt),
+      excerpt: p.excerpt ?? undefined,
       coverImageUrl,
-      publishedLabel: formatDateLabel(p.publishedAt)
+      duration: p.duration,
+      tags: p.tags,
+      featured: p.featured ?? false,
+      order: p.order,
+      body: p.body ?? undefined,
     } as Episode
   })
 }
@@ -72,6 +91,27 @@ export async function fetchPodcastList(): Promise<Episode[]> {
 export async function fetchPodcastBySlug(slug: string): Promise<Episode | null> {
   const p = await sanityServerClient.fetch<SanityPodcast>(PODCAST_BY_SLUG, { slug })
   if (!p) return null
-  const coverImageUrl = p.coverImageUrl || (p.coverImage ? urlFor(p.coverImage).width(1600).auto('format').url() : null)
-  return { ...p, coverImageUrl, publishedLabel: formatDateLabel(p.publishedAt) } as Episode
+
+  const coverImageUrl =
+    p.coverImageUrl ??
+    (p.coverImage ? urlFor(p.coverImage).width(1600).auto('format').url() : undefined)
+
+  const mapped: Episode = {
+    _id: p._id,
+    title: p.title,
+    slug: p.slug,
+    episodeNumber: p.episodeNumber,
+    youtubeUrl: p.youtubeUrl,
+    publishedAt: p.publishedAt,
+    publishedLabel: formatDateLabel(p.publishedAt),
+    excerpt: p.excerpt ?? undefined,
+    coverImageUrl,
+    duration: p.duration,
+    tags: p.tags,
+    featured: p.featured ?? false,
+    order: p.order,
+    body: p.body ?? undefined,
+  }
+
+  return mapped
 }

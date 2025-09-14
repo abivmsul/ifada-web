@@ -1,51 +1,86 @@
 // src/lib/fetchers/projects.ts
 import { sanityServerClient, urlFor } from '@/lib/sanity.server'
-import { projectsListQuery, projectsCountQuery, PROJECT_BY_SLUG , PROJECTS_FEATURED, PROJECTS_LIST} from '@/lib/queries/projects'
+import {
+  projectsListQuery,
+  projectsCountQuery,
+  PROJECT_BY_SLUG,
+  PROJECTS_FEATURED,
+  PROJECTS_LIST,
+} from '@/lib/queries/projects'
+import type { PortableTextBlock } from '@portabletext/types'
 
-// Define proper types for Sanity image
+export type PortableText = PortableTextBlock[]
+
+/* ---------- helpers ---------- */
+function normalizeSlug(raw: unknown, fallbackId?: string): string | undefined {
+  let val: unknown = undefined
+  if (typeof raw === 'string') val = raw
+  else if (raw && typeof raw === 'object' && 'current' in (raw as Record<string, unknown>)) {
+    // cast to an object shape that may contain `current` without using `any`
+    val = (raw as { current?: unknown }).current
+  } else if (fallbackId) val = fallbackId
+
+  if (val === undefined || val === null) return undefined
+  try {
+    const s = String(val).trim()
+    // remove leading/trailing slashes
+    return s.replace(/^\/+|\/+$/g, '') || undefined
+  } catch {
+    return undefined
+  }
+}
+
+function formatDateLabel(date?: string | undefined): string | undefined {
+  if (!date) return undefined
+  try {
+    const f = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+    return f.format(new Date(date))
+  } catch {
+    return date
+  }
+}
+
+/* ---------- Sanity raw shapes ---------- */
 interface SanityImage {
-  _type: 'image';
+  _type: 'image'
   asset: {
-    _ref: string;
-    _type: 'reference';
-  };
-  [key: string]: unknown;
+    _ref: string
+    _type: 'reference'
+  }
+  [key: string]: unknown
 }
 
-// Define proper types for raw data from Sanity
 interface SanityProject {
-  _id: string;
-  title: string;
-  slug?: {
-    current: string;
-    [key: string]: unknown;
-  };
-  status?: string;
-  startDate?: string;
-  endDate?: string;
-  excerpt?: string;
-  coverImage?: SanityImage;
-  coverImageUrl?: string;
-  featured?: boolean;
-  order?: number;
-  body?: unknown; // Portable text content
-  [key: string]: unknown;
+  _id: string
+  title: string
+  slug?: { current?: string } | string
+  status?: string
+  startDate?: string
+  endDate?: string
+  excerpt?: string
+  coverImage?: SanityImage
+  coverImageUrl?: string
+  featured?: boolean
+  order?: number
+  body?: PortableText
+  [key: string]: unknown
 }
 
+/* ---------- Mapped shapes consumed by the app ---------- */
 export type ProjectDTO = {
   _id: string
   title: string
   slug?: string
   status?: string
-  startDate?: string | null
-  endDate?: string | null
-  startLabel?: string | null
-  endLabel?: string | null
+  startDate?: string
+  endDate?: string
+  startLabel?: string
+  endLabel?: string
   excerpt?: string
-  coverImageUrl?: string | null
+  coverImageUrl?: string
   featured?: boolean
   order?: number
-  body?: unknown[] // Portable text content
+  body?: PortableText
 }
 
 export type ProjectItem = {
@@ -54,46 +89,38 @@ export type ProjectItem = {
   slug?: string
   excerpt?: string
   coverImage?: SanityImage
-  coverImageUrl?: string | null
+  coverImageUrl?: string
   featured?: boolean
   order?: number
 }
 
-function formatDateLabel(date?: string | null) {
-  if (!date) return null
-  try {
-    // deterministic server formatting — same on Node for SSR
-    const f = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric', month: 'short', day: 'numeric',
-    })
-    return f.format(new Date(date))
-  } catch {
-    return date
-  }
-}
-
+/* ---------- mapping ---------- */
 function mapProject(p: SanityProject): ProjectDTO {
+  const slug = normalizeSlug(p.slug, p._id)
+
   const mapped: ProjectDTO = {
     _id: p._id,
     title: p.title,
-    slug: p.slug?.current,
-    status: p.status,
-    startDate: p.startDate || null,
-    endDate: p.endDate || null,
-    excerpt: p.excerpt,
-    coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1400).auto('format').url() : null,
-    featured: p.featured || false,
-    order: p.order || 0,
-    body: p.body as unknown[] || [],
+    slug,
+    status: p.status ?? undefined,
+    startDate: p.startDate ?? undefined,
+    endDate: p.endDate ?? undefined,
+    excerpt: p.excerpt ?? undefined,
+    coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1400).auto('format').url() : p.coverImageUrl ?? undefined,
+    featured: p.featured ?? false,
+    order: p.order ?? undefined,
+    body: p.body ?? undefined,
+    startLabel: undefined,
+    endLabel: undefined,
   }
+
   mapped.startLabel = formatDateLabel(mapped.startDate)
   mapped.endLabel = formatDateLabel(mapped.endDate)
+
   return mapped
 }
 
-/**
- * Fetch paginated projects
- */
+/* ---------- fetchers ---------- */
 export async function fetchProjectsServer({
   page = 1,
   pageSize = 9,
@@ -116,7 +143,6 @@ export async function fetchProjectsServer({
 
   if (typeof featured === 'boolean') predicate += ` && featured == ${featured ? 'true' : 'false'}`
 
-  // status: rely on stored status OR compute via dates if you prefer
   if (status) {
     predicate += ` && status == "${status}"`
   }
@@ -139,43 +165,60 @@ export async function fetchProjectsServer({
 }
 
 export async function getProjectBySlug(slug: string): Promise<ProjectDTO | null> {
-  const p = await sanityServerClient.fetch<SanityProject>(PROJECT_BY_SLUG, { slug })
+  // try slug lookup first (PROJECT_BY_SLUG should use slug.current == $slug)
+  let p = await sanityServerClient.fetch<SanityProject | null>(PROJECT_BY_SLUG, { slug })
+  if (!p) {
+    // fallback: try lookup by _id (if caller accidentally passed an _id)
+    try {
+      p = await sanityServerClient.fetch<SanityProject | null>('*[_id == $id][0]', { id: slug })
+    } catch {
+      p = null
+    }
+  }
   if (!p) return null
-  return {
-    ...p,
-    slug: p.slug?.current,
-    coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1600).auto('format').url() : null,
-    startLabel: p.startDate ? formatDateLabel(p.startDate) : null,
-    endLabel: p.endDate ? formatDateLabel(p.endDate) : null,
-  } as ProjectDTO
+
+  // normalize slug to string (prefer slug.current, fallback to _id)
+  const normalizedSlug = normalizeSlug(p.slug, p._id)
+
+  const mapped: ProjectDTO = {
+    _id: p._id,
+    title: p.title,
+    slug: normalizedSlug,
+    status: p.status ?? undefined,
+    startDate: p.startDate ?? undefined,
+    endDate: p.endDate ?? undefined,
+    excerpt: p.excerpt ?? undefined,
+    coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1600).auto('format').url() : p.coverImageUrl ?? undefined,
+    featured: p.featured ?? false,
+    order: p.order ?? undefined,
+    body: p.body ?? undefined,
+    startLabel: formatDateLabel(p.startDate ?? undefined),
+    endLabel: formatDateLabel(p.endDate ?? undefined),
+  }
+
+  return mapped
 }
 
 export async function fetchFeaturedProjects(limit = 3): Promise<ProjectItem[]> {
   try {
-    // Try to fetch featured projects first
     let raw: SanityProject[] | null = await sanityServerClient.fetch<SanityProject[]>(PROJECTS_FEATURED)
 
-    // If no featured projects found, fall back to the full list
     if (!raw || raw.length === 0) {
       raw = await sanityServerClient.fetch<SanityProject[]>(PROJECTS_LIST)
     }
 
     const mapped = (raw || []).map((p: SanityProject) => {
-      // Prefer the pre-resolved coverImageUrl from GROQ (coverImage.asset->url)
-      // otherwise build one with urlFor (image builder).
-      const coverImageUrl =
-        p.coverImageUrl ??
-        (p.coverImage ? urlFor(p.coverImage).width(1400).auto('format').url() : null)
+      const coverImageUrl = p.coverImageUrl ?? (p.coverImage ? urlFor(p.coverImage).width(1400).auto('format').url() : undefined)
 
       return {
         _id: p._id,
         title: p.title,
-        slug: p.slug?.current,
-        excerpt: p.excerpt,
+        slug: normalizeSlug(p.slug, p._id),
+        excerpt: p.excerpt ?? undefined,
         coverImage: p.coverImage,
         coverImageUrl,
         featured: p.featured ?? false,
-        order: p.order ?? null,
+        order: p.order ?? undefined,
       } as ProjectItem
     })
 
@@ -189,11 +232,16 @@ export async function fetchFeaturedProjects(limit = 3): Promise<ProjectItem[]> {
 export async function fetchProjectsList(): Promise<ProjectItem[]> {
   const raw = await sanityServerClient.fetch<SanityProject[]>(PROJECTS_LIST)
   return (raw || []).map((p: SanityProject) => {
-    const coverImageUrl = p.coverImageUrl ?? (p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : null)
-    return { 
-      ...p, 
-      slug: p.slug?.current,
-      coverImageUrl 
+    const coverImageUrl = p.coverImageUrl ?? (p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : undefined)
+    return {
+      _id: p._id,
+      title: p.title,
+      slug: normalizeSlug(p.slug, p._id),
+      excerpt: p.excerpt ?? undefined,
+      coverImage: p.coverImage,
+      coverImageUrl,
+      featured: p.featured ?? false,
+      order: p.order ?? undefined,
     } as ProjectItem
   })
 }
