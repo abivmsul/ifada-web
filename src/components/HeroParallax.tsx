@@ -35,7 +35,7 @@ export default function HeroParallax({
   const contentY = useTransform(scrollY, [0, 500], [0, -18])
 
   const overlay = Math.max(0, Math.min(1, overlayStrength))
-  const amirs = '/images/ifada-amirs.jpg'
+  const amirs = '/images/ifada-amikrs.jpg'
   return (
     <header className="relative h-[72vh] md:h-[82vh] overflow-hidden flex items-center justify-center text-center">
       {/* background + overlays */}
@@ -44,9 +44,18 @@ export default function HeroParallax({
         className="absolute inset-0 z-0"
         aria-hidden
       >
-        {amirs ? (
+         <Image
+            src="/images/ifada-amirs.jpg"
+            alt={title}
+            fill
+            sizes="100vw"
+            priority
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            className="hero-bg-image"
+          />
+        {/* {amirs ? (
           <Image
-            src={amirs}
+            src="/images/ifada-amirs.jpg"
             alt={title}
             fill
             sizes="100vw"
@@ -56,7 +65,7 @@ export default function HeroParallax({
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-primary to-primary/70" />
-        )}
+        )} */}
 
         {/* Softer gradient overlay */}
         <div
