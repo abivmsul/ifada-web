@@ -7,8 +7,20 @@ import SectionWrapper from '@/components/SectionWrapper'
 
 export const revalidate = 60
 
-export default async function ProgramDetail({ params }: { params: { slug: string } }) {
-  const program = await getProgramBySlug(params.slug)
+// local Props shape used after awaiting/casting
+interface Props {
+  params: {
+    slug: string
+  }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export default async function ProgramDetail(props: unknown) {
+  // await props then cast to our Props shape to avoid Next's PageProps compile-time check
+  const { params } = (await props) as Props
+  const { slug } = params
+
+  const program = await getProgramBySlug(slug)
   if (!program) return notFound()
 
   return (

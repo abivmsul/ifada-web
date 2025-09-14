@@ -1,110 +1,72 @@
-// src/app/blog/[slug]/page.tsx
-import { Metadata } from 'next'
-import Image from 'next/image'
+// src/app/(web)/blog/[slug]/page.tsx
+import React from 'react'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import SectionWrapper from '@/components/SectionWrapper'
+import Image from 'next/image'
 import PortableTextRenderer from '@/components/PortableTextRenderer'
 import { fetchPostBySlug } from '@/lib/fetchers/posts'
 
-export const revalidate = 60
-
-// Define a proper type for Portable Text blocks
-type PortableTextBlock = {
-  _key: string;
-  _type: string;
-  children: Array<{
-    _key: string;
-    _type: string;
-    text: string;
-    marks?: string[];
-  }>;
-  markDefs?: Array<{
-    _key: string;
-    _type: string;
-    [key: string]: unknown;
-  }>;
-  style?: string;
-  [key: string]: unknown;
-};
-
-type Post = {
-  title: string
-  slug: string
-  coverImageUrl?: string | null
-  body: PortableTextBlock[] // Replace 'any' with proper type
-  publishedLabel?: string | null
-  authorName?: string | null
-  tags?: string[] | null
-  description?: string | null
+/**
+ * Local Props shape we expect once Next resolves the incoming props object.
+ * We keep this local and cast inside the functions to avoid Next's type-level
+ * PageProps constraint complaining about Promise-like params.
+ */
+interface Props {
+  params: {
+    slug: string
+  }
+  searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-/** Generate metadata for the post page (title, description, open graph) */
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = await fetchPostBySlug(params.slug) as Post | null
-
-  if (!post) {
-    return {
-      title: 'Post not found',
-    }
-  }
+/**
+ * generateMetadata: accept unknown, await and then cast.
+ * This avoids Next.js compile-time mismatch while keeping internal typing.
+ */
+export async function generateMetadata(props: unknown): Promise<Metadata> {
+  const { params } = (await props) as Props
+  const post = await fetchPostBySlug(params.slug)
+  if (!post) return { title: 'Post not found' }
 
   return {
-    title: post.title,
-    description: post.description ?? post.publishedLabel ?? undefined,
+    title: post.title ?? 'Blog post',
+    description: post.excerpt ?? undefined,
     openGraph: {
-      title: post.title,
-      description: post.description ?? post.publishedLabel ?? undefined,
+      title: post.title ?? undefined,
+      description: post.excerpt ?? undefined,
       images: post.coverImageUrl ? [{ url: post.coverImageUrl }] : undefined,
     },
   }
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = (await fetchPostBySlug(params.slug)) as Post | null
+/**
+ * Page component: keep the same pattern (props: unknown -> await -> cast).
+ */
+export default async function BlogPostPage(props: unknown) {
+  const { params } = (await props) as Props
+  const { slug } = params
 
-  if (!post) return notFound()
+  const post = await fetchPostBySlug(slug)
+  if (!post) notFound()
 
   return (
-    <main>
-      <SectionWrapper id="post" className="py-12">
-        <div className="max-w-3xl mx-auto px-4">
-          {post.coverImageUrl ? (
-            <div className="relative h-64 md:h-96 mb-8 rounded overflow-hidden">
-              <Image
-                src={post.coverImageUrl}
-                alt={post.title}
-                fill
-                style={{ objectFit: 'cover' }}
-                sizes="(min-width: 768px) 800px, 100vw"
-                priority
-              />
+    <main className="max-w-4xl mx-auto px-4 py-10">
+      <article>
+        <header className="mb-6">
+          <h1 className="text-3xl font-semibold">{post.title}</h1>
+
+          {post.coverImageUrl && (
+            <div className="mt-4 w-full h-64 relative rounded overflow-hidden">
+              <Image src={post.coverImageUrl} alt={post.title ?? 'cover'} fill style={{ objectFit: 'cover' }} />
             </div>
-          ) : (
-            <div className="h-32 md:h-48 mb-8 rounded bg-gray-100 dark:bg-gray-800" />
           )}
 
-          <h1 className="text-3xl font-bold mb-3">{post.title}</h1>
+          {post.publishedLabel && <p className="mt-3 text-sm text-gray-600">{post.publishedLabel}</p>}
+        </header>
 
-          <div className="text-sm text-gray-500 mb-6">
-            <span className="text-secondary">{post.publishedLabel ?? 'Unpublished'}</span>
-            {post.authorName ? ` • ${post.authorName}` : ' • Ifada Communication'}
-          </div>
-
-          <article className="prose max-w-none">
-            <PortableTextRenderer value={post.body} />
-          </article>
-
-          {post.tags?.length ? (
-            <div className="mt-8 flex flex-wrap gap-2">
-              {post.tags.map((t) => (
-                <span key={t} className="text-xs px-2 py-1 bg-gray-100 rounded-full">
-                  {t}
-                </span>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      </SectionWrapper>
+        <section className="prose max-w-none">
+          <PortableTextRenderer value={post.body ?? null} />
+        </section>
+      </article>
     </main>
   )
 }

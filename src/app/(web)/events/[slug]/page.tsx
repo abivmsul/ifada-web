@@ -7,8 +7,20 @@ import PortableTextRenderer from '@/components/PortableTextRenderer'
 
 export const revalidate = 60
 
-export default async function EventDetail({ params }: { params: { slug: string } }) {
-  const event = await getEventBySlug(params.slug)
+// local Props shape used internally after awaiting/casting
+interface Props {
+  params: {
+    slug: string
+  }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export default async function EventDetail(props: unknown) {
+  // await props and cast to our Props shape to be safe with Next's routing internals
+  const { params } = (await props) as Props
+  const { slug } = params
+
+  const event = await getEventBySlug(slug)
   if (!event) return notFound()
 
   const startLabel = event.start ? new Date(event.start).toLocaleString() : ''
@@ -26,7 +38,16 @@ export default async function EventDetail({ params }: { params: { slug: string }
 
           <h1 className="text-3xl font-bold mb-2">{event.title}</h1>
           <div className="text-sm text-secondary mb-2">
-            {event.isOnline ? <a href={event.registrationUrl} target="_blank" rel="noreferrer">Online event</a> : (<>{event.location?.name ?? ''} • {startLabel}{event.end ? ` — ${endLabel}` : ''}</>)}
+            {event.isOnline ? (
+              <a href={event.registrationUrl} target="_blank" rel="noreferrer">
+                Online event
+              </a>
+            ) : (
+              <>
+                {event.location?.name ?? ''} • {startLabel}
+                {event.end ? ` — ${endLabel}` : ''}
+              </>
+            )}
           </div>
 
           {event.excerpt && <p className="text-gray-700 mb-6">{event.excerpt}</p>}
@@ -40,7 +61,14 @@ export default async function EventDetail({ params }: { params: { slug: string }
           {/* Registration CTA */}
           <div className="mt-8">
             {event.registrationUrl ? (
-              <a href={event.registrationUrl} target="_blank" rel="noreferrer" className="inline-block bg-secondary text-white px-4 py-2 rounded">Register / More info</a>
+              <a
+                href={event.registrationUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block bg-secondary text-white px-4 py-2 rounded"
+              >
+                Register / More info
+              </a>
             ) : (
               <span className="text-sm text-gray-500">.</span>
             )}

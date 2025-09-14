@@ -1,31 +1,32 @@
 // src/lib/fetchers/programs.ts
 import { sanityServerClient, urlFor } from '@/lib/sanity.server'
 import { programsListQuery, programsCountQuery } from '@/lib/queries/programs'
+import type { PortableTextBlock } from '@portabletext/types'
 
 // Define proper types for Sanity image
 interface SanityImage {
-  _type: 'image';
+  _type: 'image'
   asset: {
-    _ref: string;
-    _type: 'reference';
-  };
-  [key: string]: unknown;
+    _ref: string
+    _type: 'reference'
+  }
+  [key: string]: unknown
 }
 
 // Define proper types for raw data from Sanity
 interface SanityProgram {
-  _id: string;
-  title: string;
+  _id: string
+  title: string
   slug?: {
-    current: string;
-    [key: string]: unknown;
-  };
-  excerpt?: string;
-  coverImage?: SanityImage;
-  featured?: boolean;
-  order?: number;
-  body?: unknown; // Portable text content
-  [key: string]: unknown;
+    current?: string
+    [key: string]: unknown
+  } | string
+  excerpt?: string
+  coverImage?: SanityImage
+  featured?: boolean
+  order?: number
+  body?: PortableTextBlock[] | null // typed portable text
+  [key: string]: unknown
 }
 
 export type ProgramDTO = {
@@ -33,10 +34,11 @@ export type ProgramDTO = {
   title: string
   slug?: string
   excerpt?: string
-  coverImage?: SanityImage
+  coverImage?: SanityImage | null
   coverImageUrl?: string | null
   featured?: boolean
   order?: number
+  body?: PortableTextBlock[] | null
 }
 
 export async function fetchProgramsServer({
@@ -54,7 +56,6 @@ export async function fetchProgramsServer({
   const size = Math.max(1, Number(pageSize || 9))
   const offset = (pageNum - 1) * size
 
-  // build predicate; use parameterized search for safety
   let predicate = ''
   const params: Record<string, string> = {}
 
@@ -63,12 +64,10 @@ export async function fetchProgramsServer({
   }
 
   if (search && search.trim().length > 0) {
-    // use GROQ match operator: match is case-insensitive and supports substrings
     predicate += ` && (title match $search || excerpt match $search)`
     params.search = `*${search}*`
   }
 
-  // build queries with slice (offset..offset+size)
   const listQuery = programsListQuery(offset, size, predicate)
   const countQuery = programsCountQuery(predicate)
 
@@ -77,15 +76,16 @@ export async function fetchProgramsServer({
     sanityServerClient.fetch<number>(countQuery, params),
   ])
 
-  const items = (itemsRaw || []).map((p: SanityProgram) => ({
+  const items: ProgramDTO[] = (itemsRaw || []).map((p) => ({
     _id: p._id,
     title: p.title,
-    slug: p.slug?.current,
+    slug: typeof p.slug === 'string' ? p.slug : p.slug?.current,
     excerpt: p.excerpt,
-    coverImage: p.coverImage,
+    coverImage: p.coverImage ?? null,
     coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : null,
     featured: p.featured || false,
-    order: p.order || 0,
+    order: p.order ?? 0,
+    body: (p.body ?? null) as PortableTextBlock[] | null,
   }))
 
   return { items, total: Number(total || 0), page: pageNum, pageSize: size }
@@ -93,17 +93,18 @@ export async function fetchProgramsServer({
 
 // reuse existing function to get single program by slug (kept minimal)
 export async function getProgramBySlug(slug: string): Promise<ProgramDTO | null> {
-  const q = `*[_type == "program" && slug.current == $slug][0]{ _id, title, "slug": slug.current, excerpt, coverImage, body }`
+  const q = `*[_type == "program" && slug.current == $slug][0]{ _id, title, "slug": slug.current, excerpt, coverImage, body, featured, order }`
   const p = await sanityServerClient.fetch<SanityProgram>(q, { slug })
   if (!p) return null
   return {
     _id: p._id,
     title: p.title,
-    slug: p.slug?.current,
+    slug: typeof p.slug === 'string' ? p.slug : p.slug?.current,
     excerpt: p.excerpt,
-    coverImage: p.coverImage,
+    coverImage: p.coverImage ?? null,
     coverImageUrl: p.coverImage ? urlFor(p.coverImage).width(1600).auto('format').url() : null,
     featured: p.featured || false,
-    order: p.order || 0,
+    order: p.order ?? 0,
+    body: (p.body ?? null) as PortableTextBlock[] | null,
   }
 }

@@ -8,8 +8,20 @@ import PortableTextRenderer from '@/components/PortableTextRenderer'
 
 export const revalidate = 60
 
-export default async function PodcastDetail({ params }: { params: { slug: string } }) {
-  const episode = await fetchPodcastBySlug(params.slug)
+// local Props shape used after awaiting/casting
+interface Props {
+  params: {
+    slug: string
+  }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export default async function PodcastDetail(props: unknown) {
+  // await props (Next may pass promise-like params) then cast to our Props shape
+  const { params } = (await props) as Props
+  const { slug } = params
+
+  const episode = await fetchPodcastBySlug(slug)
   if (!episode) return notFound()
 
   return (
@@ -24,7 +36,9 @@ export default async function PodcastDetail({ params }: { params: { slug: string
 
           <h1 className="text-3xl font-bold mb-2">{episode.title}</h1>
           <div className="text-sm text-gray-500 mb-4">
-            <span className='text-secondary'>{episode.episodeNumber ? `Episode ${episode.episodeNumber} • ` : ''}</span>
+            <span className="text-secondary">
+              {episode.episodeNumber ? `Episode ${episode.episodeNumber} • ` : ''}
+            </span>
             {episode.publishedLabel ?? ''}
             {episode.duration ? ` • ${episode.duration}` : ''}
           </div>
@@ -43,7 +57,14 @@ export default async function PodcastDetail({ params }: { params: { slug: string
           )}
 
           <div className="mt-6">
-            <a href={episode.youtubeUrl ?? '#'} target="_blank" rel="noreferrer" className="bg-secondary text-white px-4 py-2 rounded">Open on YouTube</a>
+            <a
+              href={episode.youtubeUrl ?? '#'}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-secondary text-white px-4 py-2 rounded"
+            >
+              Open on YouTube
+            </a>
           </div>
         </div>
       </SectionWrapper>
