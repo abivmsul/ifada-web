@@ -1,89 +1,65 @@
-# Ifada Web — Official Website
+# 🌙 IFADA Islamic Organization Web Platform
 
-[![Repo Size](https://img.shields.io/github/repo-size/abivmsul/ifada-web)](https://github.com/abivmsul/ifada-web)
-[![License](https://img.shields.io/github/license/abivmsul/ifada-web)](LICENSE)
-[![Last Commit](https://img.shields.io/github/last-commit/abivmsul/ifada-web)](https://github.com/abivmsul/ifada-web)
-[![Language: TypeScript](https://img.shields.io/badge/language-TypeScript-blue)](https://www.typescriptlang.org/)
-[![Framework: Next.js](https://img.shields.io/badge/framework-Next.js-black)](https://nextjs.org/)
+> Empowering youth through spirituality, community service, and Islamic education.
 
-> Official website for Ifada Islamic Organisation — built with Next.js + TypeScript.  
-> A responsive, accessible, and content-managed site intended to showcase services, events, and donation/campaigns.
-
----
-
-## Demo / Screenshots
-
-> **Live demo:** _(Add your deployed URL here, e.g. https://ifada.example.com)_
-
-![Homepage Screenshot - replace with your screenshot](./assets/screenshot-home.png)
+[![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)]()
+[![Next.js](https://img.shields.io/badge/Next.js-13+-black?logo=next.js)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)]()
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.x-teal?logo=tailwindcss)]()
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)]()
 
 ---
 
-## Table of contents
+## 🕌 About IFADA
 
-- [About](#about)
-- [Features](#features)
-- [Tech stack](#tech-stack)
-- [Architecture & notable files](#architecture--notable-files)
-- [Getting started (local)](#getting-started-local)
-- [Environment variables](#environment-variables)
-- [Scripts](#scripts)
-- [Deployment](#deployment)
-- [How I approached this project (for recruiters)](#how-i-approached-this-project-for-recruiters)
-- [Contribution](#contribution)
-- [License](#license)
-- [Contact](#contact)
+**IFADA** is a community-driven Islamic organization dedicated to connecting youth with spirituality and fulfilling social responsibilities. Through various programs and initiatives, IFADA aims to foster a sense of community, promote Islamic values, and engage in charitable activities that benefit society.
 
 ---
 
-## About
+## 🌐 Live Demo
 
-This repository contains the codebase for Ifada’s website. It was developed as a modern, maintainable web presence that supports:
-
-- Static and dynamic content pages
-- Events / campaigns listing
-- Donation or contact flows (if present)
-- Mobile-first, accessible UI
-
-Repository uses Next.js and TypeScript. :contentReference[oaicite:1]{index=1}
+Explore the platform: [https://ifadaislamicorg.vercel.app/](https://ifadaislamicorg.vercel.app/)
 
 ---
 
-## Features
+## 🧠 Features
 
-- Responsive layout (mobile → desktop)
-- Clean semantic markup for accessibility
-- Content-managed sections (CMS integration ready/used)
-- Well-structured components and CSS (Tailwind/PostCSS or custom)
-- Developer-friendly scripts for local development and production builds
-
----
-
-## Tech stack
-
-- **Framework:** Next.js (React)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS / PostCSS (project contains Tailwind config)
-- **CMS / Config:** Sanity / sanity.config.ts present (if used)
-- **Bundler / Tools:** Node, npm / pnpm / yarn
-
-(These come from the repository file structure and config files.) :contentReference[oaicite:2]{index=2}
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **Project Showcases**: Highlighting key initiatives such as:
+  - Clean water supply to underserved rural areas.
+  - Construction of water wells in various regions.
+  - Financial support for orphan sponsorships.
+- **Upcoming Events**: Stay informed about upcoming activities and programs.
+- **Resource Center**: Access to lectures, Ramadan highlights, and community impact reports.
+- **Community Engagement**: Integration with Telegram for real-time updates and discussions.
 
 ---
 
-## Architecture & notable files
+## ⚙️ Tech Stack
 
-- `app/` — Next.js app routes and pages (main frontend code)
-- `src/` — source components & utilities
-- `sanity.config.ts` — CMS configuration for structured content (if used)
-- `tailwind.config.js` — tailwind setup
-- `README.md` — this file
+- **Frontend Framework**: [Next.js 13+](https://nextjs.org/)
+- **Programming Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide](https://lucide.dev/) / [Heroicons](https://heroicons.com/)
+- **Deployment**: [Vercel](https://vercel.com)
 
 ---
 
-## Getting started (local)
+## 🛠️ Getting Started
 
-1. Clone the repo
+### Prerequisites
+
+Ensure you have the following installed:
+
+- [Node.js 18+](https://nodejs.org/)
+- npm (comes with Node.js) or [pnpm](https://pnpm.io/) / [yarn](https://yarnpkg.com/)
+- Git
+
+### Installation
+
+Clone the repository and install dependencies:
+
 ```bash
 git clone https://github.com/abivmsul/ifada-web.git
 cd ifada-web
+npm install
